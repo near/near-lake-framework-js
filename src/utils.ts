@@ -1,12 +1,10 @@
 import { Readable } from 'stream';
 import { Block } from './types';
 
+export const sleep = (pause: number) => new Promise((resolve) => setTimeout(resolve, pause))
+
 export function prependZeroes(number: number) {
-  let string_number = number.toString();
-  while (string_number.length < 12) {
-    string_number = "0" + string_number;
-  }
-  return string_number;
+  return number.toString().padStart(12, '0');
 }
 
 export async function parseBody<T>(stream: Readable): Promise<T> {

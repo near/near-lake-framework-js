@@ -1,6 +1,7 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { listBlocks, fetchStreamerMessage } from './s3fetchers';
 import { LakeConfig, BlockHeight, StreamerMessage } from './types';
+import { sleep } from './utils';
 
 export async function startStream(
   config: LakeConfig,
@@ -17,7 +18,7 @@ export async function startStream(
     if (blockHeights.length > 0) {
       startFromBlockHeight = blockHeights[blockHeights.length - 1];
     } else {
-      setTimeout(() => {}, 2000);
+      await sleep(2000);
       continue;
     }
     for (let blockHeight of blockHeights) {

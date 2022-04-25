@@ -22,8 +22,7 @@ export async function listBlocks(
           RequestPayer: "requester",
         })
     );
-    const blockHeights = data.CommonPrefixes.map(p => parseInt(p.Prefix.split('/')[0]));
-    return blockHeights;
+    return data.CommonPrefixes.map(p => parseInt(p.Prefix.split('/')[0]));
   } catch (err) {
     console.log("Error", err);
   }
@@ -32,7 +31,7 @@ export async function listBlocks(
 // By the given block height gets the objects:
 // - block.json
 // - shard_N.json
-// Returns the result in `near_indexer_primitives::StreamerMessage`
+// Returns the result as `StreamerMessage`
 export async function fetchStreamerMessage(
   client: S3Client,
   bucketName: string,
@@ -40,8 +39,7 @@ export async function fetchStreamerMessage(
 ): Promise<StreamerMessage> {
   const block = await fetchBlock(client, bucketName, blockHeight);
   const shards = await fetchShards(client, bucketName, blockHeight, block.chunks.length);
-  const streamerMessage: StreamerMessage = { block, shards };
-  return streamerMessage;
+  return { block, shards };
 }
 
 // By the given block height gets the block.json
@@ -73,11 +71,11 @@ async function fetchShards(
   client: S3Client,
   bucketName: string,
   blockHeight: BlockHeight,
-  chunksIncluded: number,
+  numberOfShards: number,
 ): Promise<Shard[]> {
-  if (chunksIncluded === 0) return [];
+  if (numberOfShards === 0) return [];
 
-  const shardPromises = [...Array(chunksIncluded).keys()].map(async index => fetchSingleShard(
+  const shardPromises = [...Array(numberOfShards).keys()].map(async index => fetchSingleShard(
     client, bucketName, blockHeight, index
   ));
 
