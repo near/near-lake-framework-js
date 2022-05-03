@@ -1,31 +1,37 @@
-import { Readable } from 'stream';
+import { Readable } from "stream";
 
-import { S3Client, ListObjectsV2Command, GetObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  ListObjectsV2Command,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
 
-import { BlockHeight, LakeConfig, Block, Shard, StreamerMessage } from './types';
-import { prependZeroes, parseBody } from './utils';
+import {
+  BlockHeight,
+  LakeConfig,
+  Block,
+  Shard,
+  StreamerMessage,
+} from "./types";
+import { prependZeroes, parseBody } from "./utils";
 
 // Queries the list of the objects in the bucket, grouped by "/" delimiter.
 // Returns the list of blocks that can be fetched
 export async function listBlocks(
   client: S3Client,
   bucketName: string,
-  startAfter: BlockHeight,
+  startAfter: BlockHeight
 ): Promise<BlockHeight[]> {
-  try {
-    const data = await client.send(
-        new ListObjectsV2Command({
-          Bucket: bucketName,
-          MaxKeys: 10,
-          Delimiter: "/",
-          StartAfter: prependZeroes(startAfter),
-          RequestPayer: "requester",
-        })
-    );
-    return data.CommonPrefixes.map(p => parseInt(p.Prefix.split('/')[0]));
-  } catch (err) {
-    console.log("Error", err);
-  }
+  const data = await client.send(
+    new ListObjectsV2Command({
+      Bucket: bucketName,
+      MaxKeys: 10,
+      Delimiter: "/",
+      StartAfter: prependZeroes(startAfter),
+      RequestPayer: "requester",
+    })
+  );
+  return data.CommonPrefixes.map((p) => parseInt(p.Prefix.split("/")[0]));
 }
 
 // By the given block height gets the objects:
@@ -35,10 +41,15 @@ export async function listBlocks(
 export async function fetchStreamerMessage(
   client: S3Client,
   bucketName: string,
-  blockHeight: BlockHeight,
+  blockHeight: BlockHeight
 ): Promise<StreamerMessage> {
   const block = await fetchBlock(client, bucketName, blockHeight);
-  const shards = await fetchShards(client, bucketName, blockHeight, block.chunks.length);
+  const shards = await fetchShards(
+    client,
+    bucketName,
+    blockHeight,
+    block.chunks.length
+  );
   return { block, shards };
 }
 
@@ -47,21 +58,25 @@ export async function fetchStreamerMessage(
 async function fetchBlock(
   client: S3Client,
   bucketName: string,
-  blockHeight: BlockHeight,
+  blockHeight: BlockHeight
 ): Promise<Block> {
-  try {
-    const data = await client.send(
-      new GetObjectCommand({
-        Bucket: bucketName,
-        Key: `${prependZeroes(blockHeight)}/block.json`,
-        RequestPayer: "requester",
-      })
-    );
-    const block: Block = await parseBody<Block>(data.Body as Readable);
-    return block;
-  } catch (err) {
-    console.error(`Failed to fetch ${blockHeight}/block.json. Retrying immediately`, err);
-    return await fetchBlock(client, bucketName, blockHeight);
+  while (true) {
+    try {
+      const data = await client.send(
+        new GetObjectCommand({
+          Bucket: bucketName,
+          Key: `${prependZeroes(blockHeight)}/block.json`,
+          RequestPayer: "requester",
+        })
+      );
+      const block: Block = await parseBody<Block>(data.Body as Readable);
+      return block;
+    } catch (err) {
+      console.error(
+        `Failed to fetch ${blockHeight}/block.json. Retrying immediately`,
+        err
+      );
+    }
   }
 }
 
@@ -71,28 +86,22 @@ async function fetchShards(
   client: S3Client,
   bucketName: string,
   blockHeight: BlockHeight,
-  numberOfShards: number,
+  numberOfShards: number
 ): Promise<Shard[]> {
   if (numberOfShards === 0) return [];
 
-  const shardPromises = [...Array(numberOfShards).keys()].map(async index => fetchSingleShard(
-    client, bucketName, blockHeight, index
-  ));
-
-  let shards: Shard[] = [];
-
-  for (const shardPromise of shardPromises) {
-    shards.push(await shardPromise);
-  }
-
-  return shards;
+  return await Promise.all(
+    [...Array(numberOfShards).keys()].map(async (index) =>
+      fetchSingleShard(client, bucketName, blockHeight, index)
+    )
+  );
 }
 
 async function fetchSingleShard(
   client: S3Client,
   bucketName: string,
   blockHeight: BlockHeight,
-  shardId: number,
+  shardId: number
 ): Promise<Shard> {
   try {
     const data = await client.send(
@@ -105,7 +114,10 @@ async function fetchSingleShard(
     const shard: Shard = await parseBody<Shard>(data.Body as Readable);
     return shard;
   } catch (err) {
-    console.error(`Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying immediately`, err);
+    console.error(
+      `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying immediately`,
+      err
+    );
     return await fetchSingleShard(client, bucketName, blockHeight, shardId);
   }
 }

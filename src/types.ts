@@ -5,18 +5,18 @@ export interface LakeConfig {
   s3BucketName: string;
   s3RegionName: string;
   startBlockHeight: number;
-};
+}
 
 export interface StreamerMessage {
   block: Block;
   shards: Shard[];
-};
+}
 
 export interface Block {
   author: string;
   header: BlockHeader;
   chunks: ChunkHeader[];
-};
+}
 
 export type ValidatorProposal = {
   accountId: string;
@@ -63,14 +63,14 @@ export interface BlockHeader {
   totalSupply: string;
   validatorProposals: [];
   validatorReward: string;
-};
+}
 
 export interface Shard {
   shard_id: number;
   chunk?: Chunk;
   receiptExecutionOutcomes: ExecutionOutcomeWithReceipt[];
   stateChanges: StateChange[];
-};
+}
 
 export interface ChunkHeader {
   balanceBurnt: number;
@@ -91,12 +91,12 @@ export interface ChunkHeader {
   txRoot: string;
   validatorProposals: ValidatorProposal[];
   validatorReward: string;
-};
+}
 
 export interface Chunk {
   author: string;
   header: ChunkHeader;
-  receipts: Receipt[],
+  receipts: Receipt[];
   transactions: IndexerTransactionWithOutcome[];
 }
 
@@ -111,7 +111,7 @@ export type ReceiptEnum =
         signerPublicKey: string;
       };
     }
-    | {
+  | {
       Data: {
         data: string;
         dataId: string;
@@ -123,7 +123,7 @@ export type Receipt = {
   receipt: ReceiptEnum;
   receiptId: string;
   receiverId: string;
-}
+};
 
 export type DeployContractAction = {
   DeployContract: {
@@ -131,7 +131,7 @@ export type DeployContractAction = {
   };
 };
 
-export type FunctionCallAction= {
+export type FunctionCallAction = {
   FunctionCall: {
     methodName: string;
     args: string;
@@ -185,13 +185,13 @@ export type Action =
 export interface AccessKey {
   nonce: number;
   permission: string | AccessKeyFunctionCallPermission;
-};
+}
 
 export interface AccessKeyFunctionCallPermission {
   allowance: string;
   receiverId: string;
   methodNames: string[];
-};
+}
 
 export type Transaction = {
   signerId: string;
@@ -220,16 +220,16 @@ export type ExecutionOutcomeWithReceipt = {
     blockHash: string;
     id: string;
     outcome: {
-      executorId: string,
-      gasBurnt: number,
-      logs: string[],
+      executorId: string;
+      gasBurnt: number;
+      logs: string[];
       metadata: {
         gasProfile: string | null;
         version: number;
       };
-      receiptIds: string[],
-      status: ExecutionStatus,
-      tokensBurnt: string
+      receiptIds: string[];
+      status: ExecutionStatus;
+      tokensBurnt: string;
     };
     proof: ExecutionProof[];
   };
@@ -250,6 +250,6 @@ export type StateChange = {
     accountId: string;
     keyBase64: string;
     valueBase64: string;
-  },
+  };
   type: string;
 };

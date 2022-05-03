@@ -1,10 +1,11 @@
-import { Readable } from 'stream';
-import { Block } from './types';
+import { Readable } from "stream";
+import { Block } from "./types";
 
-export const sleep = (pause: number) => new Promise((resolve) => setTimeout(resolve, pause))
+export const sleep = (pause: number) =>
+  new Promise((resolve) => setTimeout(resolve, pause));
 
 export function prependZeroes(number: number) {
-  return number.toString().padStart(12, '0');
+  return number.toString().padStart(12, "0");
 }
 
 export async function parseBody<T>(stream: Readable): Promise<T> {
@@ -15,7 +16,7 @@ export async function parseBody<T>(stream: Readable): Promise<T> {
 
 // the function got from
 // https://github.com/aws/aws-sdk-js-v3/issues/1877#issuecomment-755387549
-function streamToString (stream: Readable): Promise<string> {
+function streamToString(stream: Readable): Promise<string> {
   return new Promise((resolve, reject) => {
     const chunks = [];
     stream.on("data", (chunk) => chunks.push(chunk));
@@ -32,14 +33,14 @@ function renameUnderscoreFieldsToSnakeCase(name, value) {
     const newValue = {};
     for (const key in value) {
       const newKey = key
-        .split('_')
+        .split("_")
         .map((word, i) => {
           if (i > 0) {
             return word.charAt(0).toUpperCase() + word.slice(1);
           }
-          return word
+          return word;
         })
-        .join('');
+        .join("");
       newValue[newKey] = value[key];
     }
     return newValue;

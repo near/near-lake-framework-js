@@ -10,6 +10,7 @@
     "@aws-sdk/client-s3": "^3.32.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.23"
+    "@types/node": "^17.0.23",
+    "prettier": "2.6.2"
   }
 }
