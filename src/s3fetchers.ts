@@ -13,7 +13,7 @@ import {
   Shard,
   StreamerMessage,
 } from "./types";
-import { prependZeroes, parseBody } from "./utils";
+import { normalizeBlockHeight, parseBody } from "./utils";
 
 // Queries the list of the objects in the bucket, grouped by "/" delimiter.
 // Returns the list of blocks that can be fetched
@@ -27,7 +27,7 @@ export async function listBlocks(
       Bucket: bucketName,
       MaxKeys: 10,
       Delimiter: "/",
-      StartAfter: prependZeroes(startAfter),
+      StartAfter: normalizeBlockHeight(startAfter),
       RequestPayer: "requester",
     })
   );
@@ -65,7 +65,7 @@ async function fetchBlock(
       const data = await client.send(
         new GetObjectCommand({
           Bucket: bucketName,
-          Key: `${prependZeroes(blockHeight)}/block.json`,
+          Key: `${normalizeBlockHeight(blockHeight)}/block.json`,
           RequestPayer: "requester",
         })
       );
@@ -107,7 +107,7 @@ async function fetchSingleShard(
     const data = await client.send(
       new GetObjectCommand({
         Bucket: bucketName,
-        Key: `${prependZeroes(blockHeight)}/shard_${shardId}.json`,
+        Key: `${normalizeBlockHeight(blockHeight)}/shard_${shardId}.json`,
         RequestPayer: "requester",
       })
     );

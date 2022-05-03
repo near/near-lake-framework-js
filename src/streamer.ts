@@ -39,12 +39,16 @@ export async function startStream(
       );
       // check if we have `lastProcessedBlockHash` (might be not set only on start)
       // compare lastProcessedBlockHash` with `streamerMessage.block.header.prevHash` of the current
-      // block (ensure we don't miss anything from S3)
+      // block (ensure we never skip blocks even if there is some incident on Lake Indexer side)
       // retrieve the data from S3 if hashes don't match and repeat the main loop step
       if (
         lastProcessedBlockHash &&
         lastProcessedBlockHash !== streamerMessage.block.header.prevHash
       ) {
+        console.log(
+          "The hash of the last processed block doesn't match the prevHash of the new one. Refetching the data from S3 in 200ms"
+        );
+        await sleep(200);
         break;
       }
       queue.push(onStreamerMessageReceived(streamerMessage));

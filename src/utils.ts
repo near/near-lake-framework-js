@@ -4,13 +4,18 @@ import { Block } from "./types";
 export const sleep = (pause: number) =>
   new Promise((resolve) => setTimeout(resolve, pause));
 
-export function prependZeroes(number: number) {
+// In the S3 bucket we store blocks height with prepended zeroes
+// because these are string there and to avoid getting earlier
+// blocks after later ones because of sorting strings issues
+// we decided to prepend zeroes.
+// This function normalizes the block height number into the string
+export function normalizeBlockHeight(number: number) {
   return number.toString().padStart(12, "0");
 }
 
 export async function parseBody<T>(stream: Readable): Promise<T> {
   const contents = await streamToString(stream);
-  const parsed: T = JSON.parse(contents, renameUnderscoreFieldsToSnakeCase);
+  const parsed: T = JSON.parse(contents, renameUnderscoreFieldsToCamelCase);
   return parsed;
 }
 
@@ -26,8 +31,8 @@ function streamToString(stream: Readable): Promise<string> {
 }
 
 // function renames all fields in the nested object
-// from underscore_style to snakeCase
-function renameUnderscoreFieldsToSnakeCase(name, value) {
+// from underscore_style to camelCase
+function renameUnderscoreFieldsToCamelCase(name, value) {
   if (value && typeof value === "object" && !Array.isArray(value)) {
     // It's a non-null, non-array object, create a replacement with the keys initially-capped
     const newValue = {};
