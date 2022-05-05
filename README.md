@@ -79,19 +79,7 @@ aws_secret_access_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 ### Dependencies
 
-Add the following dependencies to your `Cargo.toml`
-
-```toml
-...
-[dependencies]
-futures = "0.3.5"
-itertools = "0.10.3"
-tokio = { version = "1.1", features = ["sync", "time", "macros", "rt-multi-thread"] }
-tokio-stream = { version = "0.1" }
-
-# NEAR Lake Framework
-near-lake-framework = { git = "https://github.com/near/near-lake-framework" }
-```
+To be described after the release on npmjs
 
 ## Configuration
 
