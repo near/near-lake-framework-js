@@ -15,7 +15,7 @@ export function normalizeBlockHeight(number: number) {
 
 export async function parseBody<T>(stream: Readable): Promise<T> {
   const contents = await streamToString(stream);
-  const parsed: T = JSON.parse(contents, renameUnderscoreFieldsToCamelCase);
+  const parsed: T = JSON.parse(contents, (key, value) => renameUnderscoreFieldsToCamelCase(value));
   return parsed;
 }
 
@@ -32,7 +32,7 @@ function streamToString(stream: Readable): Promise<string> {
 
 // function renames all fields in the nested object
 // from underscore_style to camelCase
-function renameUnderscoreFieldsToCamelCase(name, value) {
+function renameUnderscoreFieldsToCamelCase(value) {
   if (value && typeof value === "object" && !Array.isArray(value)) {
     // It's a non-null, non-array object, create a replacement with the keys initially-capped
     const newValue = {};

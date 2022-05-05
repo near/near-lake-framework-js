@@ -17,6 +17,7 @@ import { normalizeBlockHeight, parseBody } from "./utils";
 
 // Queries the list of the objects in the bucket, grouped by "/" delimiter.
 // Returns the list of blocks that can be fetched
+// See more about data structure https://github.com/near/near-lake#data-structure
 export async function listBlocks(
   client: S3Client,
   bucketName: string,
