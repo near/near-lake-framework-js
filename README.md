@@ -1,6 +1,6 @@
 # NEAR Lake Framework JS
 
-**ATTENTION!** While this library is ready for produciton use, it hasn't been tested, hasn't been cleaned up yet. Until we remove this disclaimer, please use this library on your own risk**
+**ATTENTION!** We this library is in beta and hasn't been tested in production yet.
 
 NEAR Lake Framework is a small library companion to [NEAR Lake](https://github.com/near/near-lake). It allows you to build
 your own indexer that subscribes to the stream of blocks from the NEAR Lake data source and create your own logic to process
@@ -16,20 +16,24 @@ Greetings from the Data Platform Team! We are happy and proud to announce an MVP
 ## Example
 
 ```typescript
-import { startStream, types } from 'near-lake-framework';
+import { startStream, types } from "near-lake-framework";
 
 const lakeConfig: types.LakeConfig = {
-    s3BucketName: "near-lake-data-mainnet",
-    s3RegionName: "eu-central-1",
-    startBlockHeight: 63804051,
+  s3BucketName: "near-lake-data-mainnet",
+  s3RegionName: "eu-central-1",
+  startBlockHeight: 63804051,
 };
 
-async function handleStreamerMessage(streamerMessage: types.StreamerMessage): Promise<void> {
-    console.log(`Block #${streamerMessage.block.header.height} Shards: ${streamerMessage.shards.length}`);
+async function handleStreamerMessage(
+  streamerMessage: types.StreamerMessage
+): Promise<void> {
+  console.log(
+    `Block #${streamerMessage.block.header.height} Shards: ${streamerMessage.shards.length}`
+  );
 }
 
 (async () => {
-    await startStream(lakeConfig, handleStreamerMessage);
+  await startStream(lakeConfig, handleStreamerMessage);
 })();
 ```
 
@@ -50,10 +54,10 @@ $ mkdir -p /data/near-lake-custom && minio server /data
 
 ```typescript
 const lakeConfig: types.LakeConfig = {
-    s3Endpoint: "http://0.0.0.0:9000",
-    s3BucketName: "near-lake-custom",
-    s3RegionName: "eu-central-1",
-    startBlockHeight: 0,
+  s3Endpoint: "http://0.0.0.0:9000",
+  s3BucketName: "near-lake-custom",
+  s3RegionName: "eu-central-1",
+  startBlockHeight: 0,
 };
 ```
 
@@ -64,6 +68,7 @@ In order to be able to get objects from the AWS S3 bucket you need to provide th
 AWS default profile configuration with aws configure looks similar to the following:
 
 `~/.aws/credentials`
+
 ```
 [default]
 aws_access_key_id=AKIAIOSFODNN7EXAMPLE
@@ -94,10 +99,10 @@ Everything should be configured before the start of your indexer application via
 
 Available parameters:
 
-* `s3Endpoint: string` - provide the AWS S3 custom API ednpoint
-* `s3BucketName: string` - provide the AWS S3 bucket name (`near-lake-testnet`, `near-lake-mainnet` or yours if you run your own NEAR Lake)
-* `s3RegionName: string` - provide the region for AWS S3 bucket
-* `startBlockHeight: number` - block height to start the stream from
+- `s3Endpoint: string` - provide the AWS S3 custom API ednpoint
+- `s3BucketName: string` - provide the AWS S3 bucket name (`near-lake-testnet`, `near-lake-mainnet` or yours if you run your own NEAR Lake)
+- `s3RegionName: string` - provide the region for AWS S3 bucket
+- `startBlockHeight: number` - block height to start the stream from
 
 ## Cost estimates
 
@@ -114,6 +119,7 @@ Calculations (assuming we are following the tip of the network all the time):
 ```
 86400 blocks per day * 5 requests for each block / 1000 requests * $0.0004 per 1k requests = $0.173 * 30 days = $5.19
 ```
+
 **Note:** 5 requests for each block means we have 4 shards (1 file for common block data and 4 separate files for each shard)
 
 And a number of `list` requests we need to perform for 30 days:
@@ -132,5 +138,5 @@ The price depends on the number of shards
 
 We use Milestones with clearly defined acceptance criteria:
 
-* [x] [MVP](https://github.com/near/near-lake-framework/milestone/1)
-* [ ] [1.0](https://github.com/near/near-lake-framework/milestone/2)
+- [x] [MVP](https://github.com/near/near-lake-framework/milestone/1)
+- [ ] [1.0](https://github.com/near/near-lake-framework/milestone/2)
