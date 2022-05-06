@@ -79,7 +79,17 @@ aws_secret_access_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 ### Dependencies
 
-To be described after the release on npmjs
+Install `near-lake-framework`
+
+```bash
+$ npm i near-lake-framework
+```
+
+After that import in your code:
+
+```ts
+import { startStream, types } from 'near-lake-framework';
+```
 
 ## Configuration
 
