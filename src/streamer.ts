@@ -25,12 +25,12 @@ export async function startStream(
       console.error("Failed to list blocks. Retrying.", err);
       continue;
     }
-    if (blockHeights.length > 0) {
-      startFromBlockHeight = blockHeights[blockHeights.length - 1];
-    } else {
+
+    if (blockHeights.length === 0) {
       await sleep(2000);
       continue;
     }
+
     for (let blockHeight of blockHeights) {
       const streamerMessage = await fetchStreamerMessage(
         s3Client,
@@ -46,7 +46,9 @@ export async function startStream(
         lastProcessedBlockHash !== streamerMessage.block.header.prevHash
       ) {
         console.log(
-          "The hash of the last processed block doesn't match the prevHash of the new one. Refetching the data from S3 in 200ms"
+          "The hash of the last processed block doesn't match the prevHash of the new one. Refetching the data from S3 in 200ms",
+          lastProcessedBlockHash,
+          streamerMessage.block.header.prevHash,
         );
         await sleep(200);
         break;
@@ -60,6 +62,7 @@ export async function startStream(
         await queue.shift();
       }
       lastProcessedBlockHash = streamerMessage.block.header.hash;
+      startFromBlockHeight = streamerMessage.block.header.height + 1;
     }
   }
 }
