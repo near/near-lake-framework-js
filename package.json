@@ -4,7 +4,7 @@
   "description": "JS Library to connect to the NEAR Lake S3 and stream the data",
   "author": "NEAR Inc <hello@nearprotocol.com>",
   "keywords": ["nearprotocol", "near-indexer", "near-lake", "framework"],
-  "license": "(MIT AND Apache-2.0)",
+  "license": "(MIT OR Apache-2.0)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/near/near-lake-framework-js.git"
