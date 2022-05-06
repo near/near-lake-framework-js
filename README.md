@@ -37,6 +37,10 @@ async function handleStreamerMessage(
 })();
 ```
 
+## Tutorial
+
+Please, read the tutorial [JavaScript NEAR Lake indexer basic tutorial](https://near-indexers.io/tutorials/lake/js-lake-indexer)
+
 ## How to use
 
 ## Custom S3 storage
