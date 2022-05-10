@@ -1,5 +1,7 @@
 # NEAR Lake Framework JS
 
+Available in programming languages: [Rust](https://github.com/near/near-lake-framework) | **Javascript**
+
 **ATTENTION!** This library is in beta and hasn't been tested in production yet.
 
 NEAR Lake Framework is a small library companion to [NEAR Lake](https://github.com/near/near-lake). It allows you to build
