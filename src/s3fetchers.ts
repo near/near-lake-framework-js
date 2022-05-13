@@ -21,12 +21,13 @@ import { normalizeBlockHeight, parseBody } from "./utils";
 export async function listBlocks(
   client: S3Client,
   bucketName: string,
-  startAfter: BlockHeight
+  startAfter: BlockHeight,
+  limit = 10
 ): Promise<BlockHeight[]> {
   const data = await client.send(
     new ListObjectsV2Command({
       Bucket: bucketName,
-      MaxKeys: 10,
+      MaxKeys: limit,
       Delimiter: "/",
       StartAfter: normalizeBlockHeight(startAfter),
       RequestPayer: "requester",
