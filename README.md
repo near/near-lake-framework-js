@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/near-lake-framework.svg)](https://badge.fury.io/js/near-lake-framework)
+
 # NEAR Lake Framework JS
 
 Available in programming languages: [Rust](https://github.com/near/near-lake-framework) | **Javascript**
@@ -107,6 +109,7 @@ Available parameters:
 - `s3BucketName: string` - provide the AWS S3 bucket name (`near-lake-testnet`, `near-lake-mainnet` or yours if you run your own NEAR Lake)
 - `s3RegionName: string` - provide the region for AWS S3 bucket
 - `startBlockHeight: number` - block height to start the stream from
+- `blocksPreloadPoolSize: number` - provide the number of blocks to preload (default: 200)
 
 ## Cost estimates
 
