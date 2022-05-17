@@ -3,13 +3,12 @@ import { listBlocks, fetchStreamerMessage } from "./s3fetchers";
 import { LakeConfig, BlockHeight, StreamerMessage } from "./types";
 import { sleep } from "./utils";
 
-export async function* stream(
+export async function* batchStream(
   config: LakeConfig
-): AsyncIterableIterator<StreamerMessage> {
+): AsyncIterableIterator<StreamerMessage[]> {
   const s3Client = new S3Client({ region: config.s3RegionName });
 
-  let lastProcessedBlockHash: string;
-  let startFromBlockHeight = config.startBlockHeight;
+  let startBlockHeight = config.startBlockHeight;
 
   while (true) {
     let blockHeights;
@@ -17,7 +16,7 @@ export async function* stream(
       blockHeights = await listBlocks(
         s3Client,
         config.s3BucketName,
-        startFromBlockHeight,
+        startBlockHeight,
         config.blocksPreloadPoolSize
       );
     } catch (err) {
@@ -26,34 +25,52 @@ export async function* stream(
     }
 
     if (blockHeights.length === 0) {
+      // Throttling when there are no new blocks
       await sleep(2000);
       continue;
     }
 
-    const messages = await Promise.all(
+    yield await Promise.all(
       blockHeights.map(blockHeight => fetchStreamerMessage(s3Client, config.s3BucketName, blockHeight)));
-    for (let streamerMessage of messages) {
-      // check if we have `lastProcessedBlockHash` (might be not set only on start)
-      // compare lastProcessedBlockHash` with `streamerMessage.block.header.prevHash` of the current
-      // block (ensure we never skip blocks even if there is some incident on Lake Indexer side)
-      // retrieve the data from S3 if hashes don't match and repeat the main loop step
-      if (
-        lastProcessedBlockHash &&
-        lastProcessedBlockHash !== streamerMessage.block.header.prevHash
-      ) {
-        console.log(
-          "The hash of the last processed block doesn't match the prevHash of the new one. Refetching the data from S3 in 200ms",
-          lastProcessedBlockHash,
-          streamerMessage.block.header.prevHash,
-        );
-        await sleep(200);
-        break;
+
+    startBlockHeight = Math.max.apply(Math, blockHeights) + 1;
+  }
+}
+
+export async function* stream(
+  config: LakeConfig
+): AsyncIterableIterator<StreamerMessage> {
+  const s3Client = new S3Client({ region: config.s3RegionName });
+
+  let lastProcessedBlockHash: string;
+  let startBlockHeight = config.startBlockHeight;
+  
+  while (true) {
+    try {
+      for await (let messages of batchStream({ ...config, startBlockHeight })) {
+        for (let streamerMessage of messages) {
+          // check if we have `lastProcessedBlockHash` (might be not set only on start)
+          // compare lastProcessedBlockHash` with `streamerMessage.block.header.prevHash` of the current
+          // block (ensure we never skip blocks even if there is some incident on Lake Indexer side)
+          // retrieve the data from S3 if hashes don't match and repeat the main loop step
+          if (
+            lastProcessedBlockHash &&
+            lastProcessedBlockHash !== streamerMessage.block.header.prevHash
+          ) {
+            throw new Error(
+              `The hash of the last processed block ${lastProcessedBlockHash} doesn't match the prevHash ${streamerMessage.block.header.prevHash} of the new one ${streamerMessage.block.header.hash}.`);
+          }
+
+          yield streamerMessage;
+
+          lastProcessedBlockHash = streamerMessage.block.header.hash;
+          startBlockHeight = streamerMessage.block.header.height + 1;
+        }
       }
-
-      yield streamerMessage;
-
-      lastProcessedBlockHash = streamerMessage.block.header.hash;
-      startFromBlockHeight = streamerMessage.block.header.height + 1;
+    } catch (e) {
+      // TODO: Should there be limit for retries?
+      console.log('Retrying on error when fetching blocks', e, 'Refetching the data from S3 in 200ms');
+      await sleep(200);
     }
   }
 }
