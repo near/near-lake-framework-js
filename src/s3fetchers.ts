@@ -22,7 +22,7 @@ export async function listBlocks(
   client: S3Client,
   bucketName: string,
   startAfter: BlockHeight,
-  limit = 10
+  limit = 200
 ): Promise<BlockHeight[]> {
   const data = await client.send(
     new ListObjectsV2Command({
