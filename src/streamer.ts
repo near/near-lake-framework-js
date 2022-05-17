@@ -19,7 +19,8 @@ export async function startStream(
       blockHeights = await listBlocks(
         s3Client,
         config.s3BucketName,
-        startFromBlockHeight
+        startFromBlockHeight,
+        config.blocksPreloadPoolSize
       );
     } catch (err) {
       console.error("Failed to list blocks. Retrying.", err);
@@ -31,12 +32,9 @@ export async function startStream(
       continue;
     }
 
-    for (let blockHeight of blockHeights) {
-      const streamerMessage = await fetchStreamerMessage(
-        s3Client,
-        config.s3BucketName,
-        blockHeight
-      );
+    const messages = await Promise.all(
+      blockHeights.map(blockHeight => fetchStreamerMessage(s3Client, config.s3BucketName, blockHeight)));
+    for (let streamerMessage of messages) {
       // check if we have `lastProcessedBlockHash` (might be not set only on start)
       // compare lastProcessedBlockHash` with `streamerMessage.block.header.prevHash` of the current
       // block (ensure we never skip blocks even if there is some incident on Lake Indexer side)
