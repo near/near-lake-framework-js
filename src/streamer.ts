@@ -3,37 +3,49 @@ import { listBlocks, fetchStreamerMessage } from "./s3fetchers";
 import { LakeConfig, BlockHeight, StreamerMessage } from "./types";
 import { sleep } from "./utils";
 
+const LIST_BLOCKS_BATCH_SIZE = 10;
+
 export async function* batchStream(
   config: LakeConfig
-): AsyncIterableIterator<StreamerMessage[]> {
+): AsyncIterableIterator<Promise<StreamerMessage>[]> {
   const s3Client = new S3Client({ region: config.s3RegionName });
 
   let startBlockHeight = config.startBlockHeight;
 
   while (true) {
-    let blockHeights;
-    try {
-      blockHeights = await listBlocks(
-        s3Client,
-        config.s3BucketName,
-        startBlockHeight,
-        config.blocksPreloadPoolSize
-      );
-    } catch (err) {
-      console.error("Failed to list blocks. Retrying.", err);
-      continue;
+    const results: Promise<StreamerMessage>[][] = [];
+    for (let i = 0; i < LIST_BLOCKS_BATCH_SIZE; i++) {
+      let blockHeights;
+      try {
+        blockHeights = await listBlocks(
+          s3Client,
+          config.s3BucketName,
+          startBlockHeight,
+          config.blocksPreloadPoolSize
+        );
+      } catch (err) {
+        console.error("Failed to list blocks. Retrying.", err);
+        continue;
+      }
+
+      if (blockHeights.length === 0) {
+        break;
+      }
+
+      results.push(blockHeights.map(blockHeight => fetchStreamerMessage(s3Client, config.s3BucketName, blockHeight)));
+      startBlockHeight = Math.max.apply(Math, blockHeights) + 1;
     }
 
-    if (blockHeights.length === 0) {
+    if (results.length === 0) {
       // Throttling when there are no new blocks
       await sleep(2000);
       continue;
     }
 
-    yield await Promise.all(
-      blockHeights.map(blockHeight => fetchStreamerMessage(s3Client, config.s3BucketName, blockHeight)));
+    for (let promises of results) {
+      yield promises;
+    }
 
-    startBlockHeight = Math.max.apply(Math, blockHeights) + 1;
   }
 }
 
@@ -47,8 +59,9 @@ export async function* stream(
   
   while (true) {
     try {
-      for await (let messages of batchStream({ ...config, startBlockHeight })) {
-        for (let streamerMessage of messages) {
+      for await (let promises of batchStream({ ...config, startBlockHeight })) {
+        for (let promise of promises) {
+          const streamerMessage = await promise;
           // check if we have `lastProcessedBlockHash` (might be not set only on start)
           // compare lastProcessedBlockHash` with `streamerMessage.block.header.prevHash` of the current
           // block (ensure we never skip blocks even if there is some incident on Lake Indexer side)
