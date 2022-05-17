@@ -3,15 +3,13 @@ import { listBlocks, fetchStreamerMessage } from "./s3fetchers";
 import { LakeConfig, BlockHeight, StreamerMessage } from "./types";
 import { sleep } from "./utils";
 
-export async function startStream(
-  config: LakeConfig,
-  onStreamerMessageReceived: (data: StreamerMessage) => Promise<void>
-) {
+export async function* stream(
+  config: LakeConfig
+): AsyncIterableIterator<StreamerMessage> {
   const s3Client = new S3Client({ region: config.s3RegionName });
 
   let lastProcessedBlockHash: string;
   let startFromBlockHeight = config.startBlockHeight;
-  let queue: Promise<void>[] = [];
 
   while (true) {
     let blockHeights;
@@ -51,16 +49,29 @@ export async function startStream(
         await sleep(200);
         break;
       }
+
+      yield streamerMessage;
+
+      lastProcessedBlockHash = streamerMessage.block.header.hash;
+      startFromBlockHeight = streamerMessage.block.header.height + 1;
+    }
+  }
+}
+
+export async function startStream(
+  config: LakeConfig,
+  onStreamerMessageReceived: (data: StreamerMessage) => Promise<void>
+) {
+  let queue: Promise<void>[] = [];
+  for await (let streamerMessage of stream(config)) {
       // `queue` here is used to achieve throttling as streamer would run ahead without a stop
       // and if we start from genesis it will spawn millions of `onStreamerMessageReceived` callbacks.
       // This implementation has a pipeline that fetches the data from S3 while `onStreamerMessageReceived`
       // is being processed, so even with a queue size of 1 there is already a benefit.
+      // TODO: Reliable error propagation for onStreamerMessageReceived?
       queue.push(onStreamerMessageReceived(streamerMessage));
       if (queue.length > 10) {
         await queue.shift();
       }
-      lastProcessedBlockHash = streamerMessage.block.header.hash;
-      startFromBlockHeight = streamerMessage.block.header.height + 1;
-    }
   }
 }
