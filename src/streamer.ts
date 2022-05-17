@@ -5,7 +5,7 @@ import { sleep } from "./utils";
 
 const LIST_BLOCKS_BATCH_SIZE = 10;
 
-export async function* batchStream(
+async function* batchStream(
   config: LakeConfig
 ): AsyncIterableIterator<Promise<StreamerMessage>[]> {
   const s3Client = new S3Client({ region: config.s3RegionName });
@@ -14,38 +14,35 @@ export async function* batchStream(
 
   while (true) {
     const results: Promise<StreamerMessage>[][] = [];
-    for (let i = 0; i < LIST_BLOCKS_BATCH_SIZE; i++) {
-      let blockHeights;
-      try {
-        blockHeights = await listBlocks(
-          s3Client,
-          config.s3BucketName,
-          startBlockHeight,
-          config.blocksPreloadPoolSize
-        );
-      } catch (err) {
-        console.error("Failed to list blocks. Retrying.", err);
-        continue;
-      }
-
-      if (blockHeights.length === 0) {
-        break;
-      }
-
-      results.push(blockHeights.map(blockHeight => fetchStreamerMessage(s3Client, config.s3BucketName, blockHeight)));
-      startBlockHeight = Math.max.apply(Math, blockHeights) + 1;
-    }
-
-    if (results.length === 0) {
-      // Throttling when there are no new blocks
-      await sleep(2000);
+    let blockHeights;
+    try {
+      blockHeights = await listBlocks(
+        s3Client,
+        config.s3BucketName,
+        startBlockHeight,
+        config.blocksPreloadPoolSize
+      );
+    } catch (err) {
+      console.error("Failed to list blocks. Retrying.", err);
       continue;
     }
 
-    for (let promises of results) {
-      yield promises;
+    yield blockHeights.map(blockHeight => fetchStreamerMessage(s3Client, config.s3BucketName, blockHeight));
+    if (blockHeights.length > 0) {
+      startBlockHeight = Math.max.apply(Math, blockHeights) + 1;
     }
+  }
+}
 
+async function* processInBatches<T>(seq: AsyncIterable<T>, batchSize: number): AsyncIterableIterator<T> {
+  while (true) {
+    for (let i = 0; i < batchSize; i++) {
+      const { value, done } = await seq[Symbol.asyncIterator]().next();
+      if (done) return;
+
+      yield value;
+    }
+    console.log('--- batch ---');
   }
 }
 
@@ -59,7 +56,13 @@ export async function* stream(
   
   while (true) {
     try {
-      for await (let promises of batchStream({ ...config, startBlockHeight })) {
+      for await (let promises of processInBatches(batchStream({ ...config, startBlockHeight }), LIST_BLOCKS_BATCH_SIZE)) {
+        if (promises.length === 0) {
+          // Throttling when there are no new blocks
+          await sleep(2000);
+          continue;
+        }
+
         for (let promise of promises) {
           const streamerMessage = await promise;
           // check if we have `lastProcessedBlockHash` (might be not set only on start)
