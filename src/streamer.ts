@@ -20,7 +20,7 @@ export async function startStream(
         s3Client,
         config.s3BucketName,
         startFromBlockHeight,
-        config.batchSize
+        config.blocksPreloadPoolSize
       );
     } catch (err) {
       console.error("Failed to list blocks. Retrying.", err);

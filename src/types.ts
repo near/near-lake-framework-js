@@ -5,7 +5,7 @@ export interface LakeConfig {
   s3BucketName: string;
   s3RegionName: string;
   startBlockHeight: number;
-  batchSize: number;
+  blocksPreloadPoolSize?: number;
 }
 
 export interface StreamerMessage {
