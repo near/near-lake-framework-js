@@ -25,10 +25,14 @@ async function* batchStream(
       continue;
     }
 
-    yield blockHeights.map(blockHeight => fetchStreamerMessage(s3Client, config.s3BucketName, blockHeight));
-    if (blockHeights.length > 0) {
-      startBlockHeight = Math.max.apply(Math, blockHeights) + 1;
+    if (blockHeights.length === 0) {
+      // Throttling when there are no new blocks
+      await sleep(2000);
+      continue;
     }
+
+    yield blockHeights.map(blockHeight => fetchStreamerMessage(s3Client, config.s3BucketName, blockHeight));
+    startBlockHeight = Math.max.apply(Math, blockHeights) + 1;
   }
 }
 
@@ -56,12 +60,6 @@ export async function* stream(
   while (true) {
     try {
       for await (let promises of fetchAhead(batchStream({ ...config, startBlockHeight }))) {
-        if (promises.length === 0) {
-          // Throttling when there are no new blocks
-          await sleep(2000);
-          continue;
-        }
-
         for (let promise of promises) {
           const streamerMessage = await promise;
           // check if we have `lastProcessedBlockHash` (might be not set only on start)
