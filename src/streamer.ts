@@ -3,8 +3,6 @@ import { listBlocks, fetchStreamerMessage } from "./s3fetchers";
 import { LakeConfig, BlockHeight, StreamerMessage } from "./types";
 import { sleep } from "./utils";
 
-const LIST_BLOCKS_BATCH_SIZE = 10;
-
 async function* batchStream(
   config: LakeConfig
 ): AsyncIterableIterator<Promise<StreamerMessage>[]> {
@@ -34,15 +32,13 @@ async function* batchStream(
   }
 }
 
-async function* processInBatches<T>(seq: AsyncIterable<T>, batchSize: number): AsyncIterableIterator<T> {
-  while (true) {
-    for (let i = 0; i < batchSize; i++) {
-      const { value, done } = await seq[Symbol.asyncIterator]().next();
-      if (done) return;
-
-      yield value;
-    }
-    console.log('--- batch ---');
+async function* fetchAhead<T>(seq: AsyncIterable<T>): AsyncIterableIterator<T> {
+  let promise, value, done
+  promise = seq[Symbol.asyncIterator]().next();
+  while (!done) {
+    ({ value, done } = await promise);
+    promise = seq[Symbol.asyncIterator]().next();
+    if (!done) yield value;
   }
 }
 
@@ -56,7 +52,7 @@ export async function* stream(
   
   while (true) {
     try {
-      for await (let promises of processInBatches(batchStream({ ...config, startBlockHeight }), LIST_BLOCKS_BATCH_SIZE)) {
+      for await (let promises of fetchAhead(batchStream({ ...config, startBlockHeight }))) {
         if (promises.length === 0) {
           // Throttling when there are no new blocks
           await sleep(2000);
