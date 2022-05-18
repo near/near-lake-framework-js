@@ -32,13 +32,16 @@ async function* batchStream(
   }
 }
 
-async function* fetchAhead<T>(seq: AsyncIterable<T>): AsyncIterableIterator<T> {
-  let promise, value, done
-  promise = seq[Symbol.asyncIterator]().next();
-  while (!done) {
-    ({ value, done } = await promise);
-    promise = seq[Symbol.asyncIterator]().next();
-    if (!done) yield value;
+async function* fetchAhead<T>(seq: AsyncIterable<T>, stepsAhead = 10): AsyncIterableIterator<T> {
+  let queue = [];
+  while (true) {
+    while (queue.length < stepsAhead) {
+      queue.push(seq[Symbol.asyncIterator]().next());
+    }
+
+    const { value, done } = await queue.shift();
+    if (done) return;
+    yield value;
   }
 }
 
