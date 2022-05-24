@@ -27,7 +27,8 @@ async function* batchStream(
 
     if (blockHeights.length === 0) {
       // Throttling when there are no new blocks
-      await sleep(2000);
+      const NO_NEW_BLOCKS_THROTTLE_MS = 700;
+      await sleep(NO_NEW_BLOCKS_THROTTLE_MS);
       continue;
     }
 
