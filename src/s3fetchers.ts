@@ -33,7 +33,7 @@ export async function listBlocks(
       RequestPayer: "requester",
     })
   );
-  return data.CommonPrefixes.map((p) => parseInt(p.Prefix.split("/")[0]));
+  return (data.CommonPrefixes || []).map((p) => parseInt(p.Prefix.split("/")[0]));
 }
 
 // By the given block height gets the objects:
