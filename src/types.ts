@@ -67,7 +67,7 @@ export interface BlockHeader {
 }
 
 export interface Shard {
-  shard_id: number;
+  shardId: number;
   chunk?: Chunk;
   receiptExecutionOutcomes: ExecutionOutcomeWithReceipt[];
   stateChanges: StateChange[];
