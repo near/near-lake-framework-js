@@ -107,7 +107,7 @@ export type ReceiptEnum =
         actions: Action[];
         gasPrice: string;
         inputDataIds: string[];
-        outputDataReceivers: string[];
+        outputDataReceivers: DataReceiver[];
         signerId: string;
         signerPublicKey: string;
       };
@@ -118,6 +118,11 @@ export type ReceiptEnum =
         dataId: string;
       };
     };
+
+export type DataReceiver = {
+  dataId: string,
+  receiverId: string,
+};
 
 export type Receipt = {
   predecessorId: string;
