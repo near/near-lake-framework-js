@@ -6,12 +6,7 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 
-import {
-  BlockHeight,
-  Block,
-  Shard,
-  StreamerMessage,
-} from "./types";
+import { BlockHeight, Block, Shard, StreamerMessage } from "./types";
 import { normalizeBlockHeight, parseBody } from "./utils";
 
 // Queries the list of the objects in the bucket, grouped by "/" delimiter.
@@ -32,7 +27,9 @@ export async function listBlocks(
       RequestPayer: "requester",
     })
   );
-  return (data.CommonPrefixes || []).map((p) => parseInt(p.Prefix.split("/")[0]));
+  return (data.CommonPrefixes || []).map((p) =>
+    parseInt(p.Prefix.split("/")[0])
+  );
 }
 
 // By the given block height gets the objects:
@@ -115,10 +112,12 @@ async function fetchSingleShard(
     const shard: Shard = await parseBody<Shard>(data.Body as Readable);
     return shard;
   } catch (err) {
-    console.error(
-      `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying immediately`,
-      err
-    );
+    if (err.Code !== "NoSuchKey") {
+      console.error(
+        `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying immediately`,
+        err
+      );
+    }
     return await fetchSingleShard(client, bucketName, blockHeight, shardId);
   }
 }
