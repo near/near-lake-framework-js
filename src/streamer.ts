@@ -1,6 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { listBlocks, fetchStreamerMessage } from "./s3fetchers";
-import { LakeConfig, BlockHeight, StreamerMessage } from "./types";
+import { LakeConfig, StreamerMessage } from "./types";
 import { sleep } from "./utils";
 
 async function* batchStream(
@@ -11,8 +11,7 @@ async function* batchStream(
   let startBlockHeight = config.startBlockHeight;
 
   while (true) {
-    const results: Promise<StreamerMessage>[][] = [];
-    let blockHeights;
+    let blockHeights: number[];
     try {
       blockHeights = await listBlocks(
         s3Client,
@@ -53,8 +52,6 @@ async function* fetchAhead<T>(seq: AsyncIterable<T>, stepsAhead = 10): AsyncIter
 export async function* stream(
   config: LakeConfig
 ): AsyncIterableIterator<StreamerMessage> {
-  const s3Client = new S3Client({ region: config.s3RegionName });
-
   let lastProcessedBlockHash: string;
   let startBlockHeight = config.startBlockHeight;
   

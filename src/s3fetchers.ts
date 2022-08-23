@@ -8,7 +8,6 @@ import {
 
 import {
   BlockHeight,
-  LakeConfig,
   Block,
   Shard,
   StreamerMessage,
