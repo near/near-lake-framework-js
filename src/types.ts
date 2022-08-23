@@ -194,9 +194,11 @@ export interface AccessKey {
 }
 
 export interface AccessKeyFunctionCallPermission {
-  allowance: string;
-  receiverId: string;
-  methodNames: string[];
+  FunctionCall: {
+    allowance: string;
+    receiverId: string;
+    methodNames: string[];
+  }
 }
 
 export type Transaction = {
