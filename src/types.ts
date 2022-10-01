@@ -1,7 +1,14 @@
 export type BlockHeight = number;
 
+export interface EndpointConfig {
+  protocol: string,
+  hostname: string,
+  port: number,
+  path: string,
+}
+
 export interface LakeConfig {
-  s3Endpoint?: string;
+  s3Endpoint?: EndpointConfig;
   s3BucketName: string;
   s3RegionName: string;
   startBlockHeight: number;
