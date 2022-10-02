@@ -6,7 +6,7 @@ import { sleep } from "./utils";
 async function* batchStream(
   config: LakeConfig
 ): AsyncIterableIterator<Promise<StreamerMessage>[]> {
-  const s3Client = new S3Client({ region: config.s3RegionName });
+  const s3Client = new S3Client({ region: config.s3RegionName, endpoint: config.s3Endpoint, forcePathStyle: config.s3ForcePathStyle });
 
   let startBlockHeight = config.startBlockHeight;
 

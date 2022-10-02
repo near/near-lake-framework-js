@@ -61,10 +61,18 @@ $ mkdir -p /data/near-lake-custom && minio server /data
 - add `s3_endpoint` parameter to LakeConfig instance
 
 ```typescript
+const localEndpoint: types.EndpointConfig = {
+    protocol: 'http',
+    hostname: '0.0.0.0',
+    port: 9000,
+    path: '/',
+};
+
 const lakeConfig: types.LakeConfig = {
-  s3Endpoint: "http://0.0.0.0:9000",
+  s3Endpoint: localEndpoint,
   s3BucketName: "near-lake-custom",
   s3RegionName: "eu-central-1",
+  s3ForcePathStyle: true,
   startBlockHeight: 0,
 };
 ```
