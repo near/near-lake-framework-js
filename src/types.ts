@@ -13,6 +13,7 @@ export interface LakeConfig {
   s3RegionName: string;
   startBlockHeight: number;
   blocksPreloadPoolSize?: number;
+  s3ForcePathStyle?: boolean;
 }
 
 export interface StreamerMessage {

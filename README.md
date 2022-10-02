@@ -72,6 +72,7 @@ const lakeConfig: types.LakeConfig = {
   s3Endpoint: localEndpoint,
   s3BucketName: "near-lake-custom",
   s3RegionName: "eu-central-1",
+  s3ForcePathStyle: true,
   startBlockHeight: 0,
 };
 ```
