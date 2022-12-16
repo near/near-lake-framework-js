@@ -1,3 +1,5 @@
+import { CredentialProvider } from "@aws-sdk/types";
+
 export type BlockHeight = number;
 
 export interface EndpointConfig {
@@ -8,6 +10,7 @@ export interface EndpointConfig {
 }
 
 export interface LakeConfig {
+  credentials?: CredentialProvider;
   s3Endpoint?: EndpointConfig;
   s3BucketName: string;
   s3RegionName: string;
