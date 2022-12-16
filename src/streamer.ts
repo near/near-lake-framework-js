@@ -3,10 +3,18 @@ import { listBlocks, fetchStreamerMessage } from "./s3fetchers";
 import { LakeConfig, BlockHeight, StreamerMessage } from "./types";
 import { sleep } from "./utils";
 
+const FATAL_ERRORS = ["CredentialsProviderError"];
+
 async function* batchStream(
   config: LakeConfig
 ): AsyncIterableIterator<Promise<StreamerMessage>[]> {
-  const s3Client = new S3Client({ region: config.s3RegionName, endpoint: config.s3Endpoint, forcePathStyle: config.s3ForcePathStyle });
+  console.log('batchStream', config);
+  const s3Client = new S3Client({
+    credentials: config.credentials,
+    region: config.s3RegionName,
+    endpoint: config.s3Endpoint,
+    forcePathStyle: config.s3ForcePathStyle
+  });
 
   let startBlockHeight = config.startBlockHeight;
 
@@ -21,6 +29,10 @@ async function* batchStream(
         config.blocksPreloadPoolSize
       );
     } catch (err) {
+      if (FATAL_ERRORS.includes(err.name)) {
+        throw err;
+      }
+
       console.error("Failed to list blocks. Retrying.", err);
       continue;
     }
@@ -57,7 +69,7 @@ export async function* stream(
 
   let lastProcessedBlockHash: string;
   let startBlockHeight = config.startBlockHeight;
-  
+
   while (true) {
     try {
       for await (let promises of fetchAhead(batchStream({ ...config, startBlockHeight }))) {
@@ -82,6 +94,10 @@ export async function* stream(
         }
       }
     } catch (e) {
+      if (FATAL_ERRORS.includes(e.name)) {
+        throw e;
+      }
+
       // TODO: Should there be limit for retries?
       console.log('Retrying on error when fetching blocks', e, 'Refetching the data from S3 in 200ms');
       await sleep(200);
