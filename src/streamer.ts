@@ -8,7 +8,6 @@ const FATAL_ERRORS = ["CredentialsProviderError"];
 async function* batchStream(
   config: LakeConfig
 ): AsyncIterableIterator<Promise<StreamerMessage>[]> {
-  console.log('batchStream', config);
   const s3Client = new S3Client({
     credentials: config.credentials,
     region: config.s3RegionName,
