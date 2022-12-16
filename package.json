@@ -1,6 +1,6 @@
 {
   "name": "near-lake-framework",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "JS Library to connect to the NEAR Lake S3 and stream the data",
   "author": "NEAR Inc <hello@nearprotocol.com>",
   "keywords": [
