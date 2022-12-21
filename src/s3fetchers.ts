@@ -1,4 +1,5 @@
 import { Readable } from "stream";
+import { sleep } from "./utils";
 
 import {
   S3Client,
@@ -62,6 +63,7 @@ async function fetchBlock(
   bucketName: string,
   blockHeight: BlockHeight
 ): Promise<Block> {
+  let retryCount = 0;
   while (true) {
     try {
       const data = await client.send(
@@ -74,10 +76,13 @@ async function fetchBlock(
       const block: Block = await parseBody<Block>(data.Body as Readable);
       return block;
     } catch (err) {
-      console.error(
-        `Failed to fetch ${blockHeight}/block.json. Retrying immediately`,
-        err
-      );
+      if (retryCount > 0) {
+        console.warn(
+          `Failed to fetch ${blockHeight}/block.json. Retrying immediately`,
+          err
+        );
+      }
+      retryCount++;
     }
   }
 }
@@ -103,7 +108,8 @@ async function fetchSingleShard(
   client: S3Client,
   bucketName: string,
   blockHeight: BlockHeight,
-  shardId: number
+  shardId: number,
+  retryCount = 0
 ): Promise<Shard> {
   try {
     const data = await client.send(
@@ -116,10 +122,12 @@ async function fetchSingleShard(
     const shard: Shard = await parseBody<Shard>(data.Body as Readable);
     return shard;
   } catch (err) {
-    console.error(
-      `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying immediately`,
-      err
-    );
-    return await fetchSingleShard(client, bucketName, blockHeight, shardId);
+    if(retryCount > 0) {
+      console.warn(
+        `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying immediately`,
+        err
+      );
+    }
+    return await fetchSingleShard(client, bucketName, blockHeight, shardId, retryCount++);
   }
 }
