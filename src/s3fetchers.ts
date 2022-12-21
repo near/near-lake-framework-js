@@ -78,11 +78,12 @@ async function fetchBlock(
     } catch (err) {
       if (retryCount > 0) {
         console.warn(
-          `Failed to fetch ${blockHeight}/block.json. Retrying immediately`,
+          `Failed to fetch ${blockHeight}/block.json. Retrying in 200ms`,
           err
         );
       }
       retryCount++;
+      await sleep(200);
     }
   }
 }
@@ -124,10 +125,11 @@ async function fetchSingleShard(
   } catch (err) {
     if(retryCount > 0) {
       console.warn(
-        `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying immediately`,
+        `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying in 200ms`,
         err
       );
     }
+    await sleep(200);
     return await fetchSingleShard(client, bucketName, blockHeight, shardId, retryCount++);
   }
 }
