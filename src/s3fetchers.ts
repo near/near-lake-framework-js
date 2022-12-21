@@ -1,4 +1,5 @@
 import { Readable } from "stream";
+import { sleep } from "./utils";
 
 import {
   S3Client,
@@ -62,6 +63,7 @@ async function fetchBlock(
   bucketName: string,
   blockHeight: BlockHeight
 ): Promise<Block> {
+  let retryCount = 0;
   while (true) {
     try {
       const data = await client.send(
@@ -74,10 +76,14 @@ async function fetchBlock(
       const block: Block = await parseBody<Block>(data.Body as Readable);
       return block;
     } catch (err) {
-      console.error(
-        `Failed to fetch ${blockHeight}/block.json. Retrying immediately`,
-        err
-      );
+      if (retryCount > 0) {
+        console.warn(
+          `Failed to fetch ${blockHeight}/block.json. Retrying in 200ms`,
+          err
+        );
+      }
+      retryCount++;
+      await sleep(200);
     }
   }
 }
@@ -105,21 +111,27 @@ async function fetchSingleShard(
   blockHeight: BlockHeight,
   shardId: number
 ): Promise<Shard> {
-  try {
-    const data = await client.send(
-      new GetObjectCommand({
-        Bucket: bucketName,
-        Key: `${normalizeBlockHeight(blockHeight)}/shard_${shardId}.json`,
-        RequestPayer: "requester",
-      })
-    );
-    const shard: Shard = await parseBody<Shard>(data.Body as Readable);
-    return shard;
-  } catch (err) {
-    console.error(
-      `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying immediately`,
-      err
-    );
-    return await fetchSingleShard(client, bucketName, blockHeight, shardId);
+  let retryCount = 0;
+  while (true) {
+    try {
+      const data = await client.send(
+        new GetObjectCommand({
+          Bucket: bucketName,
+          Key: `${normalizeBlockHeight(blockHeight)}/shard_${shardId}.json`,
+          RequestPayer: "requester",
+        })
+      );
+      const shard: Shard = await parseBody<Shard>(data.Body as Readable);
+      return shard;
+    } catch (err) {
+      if(retryCount > 0) {
+        console.warn(
+          `Failed to fetch ${blockHeight}/shard_${shardId}.json. Retrying in 200ms`,
+          err
+        );
+      }
+      retryCount++;
+      await sleep(200);
+    }
   }
 }
