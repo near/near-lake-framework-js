@@ -20,7 +20,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix"
    },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.6",

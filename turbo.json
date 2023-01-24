@@ -10,6 +10,10 @@
         "inputs": ["src/**/*.tsx", "src/**/*.ts"],
         "outputs": []
       },
+      "lint:fix": {
+        "inputs": ["src/**/*.tsx", "src/**/*.ts"],
+        "outputs": []
+      },
       "dev": {
         "cache": false,
         "persistent": true

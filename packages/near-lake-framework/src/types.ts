@@ -1,4 +1,4 @@
-import { CredentialProvider } from "@aws-sdk/types";
+import { CredentialProvider } from '@aws-sdk/types';
 
 export type BlockHeight = number;
 
@@ -190,7 +190,7 @@ export type DeleteAccountAction = {
 };
 
 export type Action =
-  | "CreateAccount"
+  | 'CreateAccount'
   | DeployContractAction
   | FunctionCallAction
   | TransferAction
