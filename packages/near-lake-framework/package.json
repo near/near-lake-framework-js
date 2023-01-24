@@ -1,0 +1,31 @@
+{
+  "name": "@near-lake-framework/streamer",
+  "version": "1.0.6",
+  "description": "JS Library to connect to the NEAR Lake S3 and stream the data",
+  "author": "NEAR Inc <hello@nearprotocol.com>",
+  "keywords": [
+    "nearprotocol",
+    "near-indexer",
+    "near-lake",
+    "framework"
+  ],
+  "license": "(MIT OR Apache-2.0)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/near/near-lake-framework-js.git"
+  },
+  "homepage": "https://near-indexers.io",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.32.0"
+  }
+}
