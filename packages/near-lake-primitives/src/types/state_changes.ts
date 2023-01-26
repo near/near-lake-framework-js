@@ -1,3 +1,4 @@
+import { StateChangeWithCauseView } from './core/types';
 import { AccessKey } from './receipts';
 
 export class StateChange {
@@ -14,11 +15,17 @@ export class StateChange {
     }
 }
 
+export function fromStateChangeViewToStateChange(stateChangeView: StateChangeWithCauseView) {
+    let { cause, value } = stateChangeView;
+    return new StateChange(cause, value)
+}
+
 type TransactionProcessingCause = { txHash: string };
 type ActionReceiptProcessingStartedCause = { receiptHash: string }
 type ActionReceiptGasRewardCause = { receiptHash: string }
 type ReceiptProcessingCause = { receiptHash: string }
 type PostponedReceiptCause = { receiptHash: string }
+
 type StateChangeCause =
     'NotWritableToDisk' |
     'InitialState' |
