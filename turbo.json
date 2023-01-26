@@ -4,7 +4,7 @@
       "build": {
         "dependsOn": ["^build"],
         "inputs": ["src/**/*.tsx", "src/**/*.ts"],
-        "outputs": ["dist/"]
+        "outputs": ["dist/**"]
       },
       "lint": {
         "inputs": ["src/**/*.tsx", "src/**/*.ts"],
