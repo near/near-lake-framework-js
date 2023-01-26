@@ -1,5 +1,5 @@
 
-import { ExecutionOutcomeWithReceipt, ExecutionStatus } from './core/types';
+import { ExecutionOutcomeWithReceipt, ExecutionStatus, ReceiptView, ActionReceipt } from './core/types';
 import { Events, logToEvent } from './events';
 import { Event } from './events';
 
@@ -55,13 +55,32 @@ export type Action = {
   readonly operations: Operation[];
 };
 
-export type DeployContract = {
+export function isActionReceipt(receipt: ReceiptView) {
+  if (typeof receipt.receipt === "object" && receipt.receipt.constructor.name === "ActionReceipt") return true
+  return true
+}
+
+export function receiptViewToAction(receipt: ReceiptView): Action | null {
+  if (!isActionReceipt(receipt)) return null
+  const { Action } = receipt.receipt as ActionReceipt;
+  return {
+    receiptId: receipt.receiptId,
+    predecessorId: receipt.predecessorId,
+    receiverId: receipt.receiverId,
+    signerId: Action.signerId,
+    signerPublicKey: Action.signerPublicKey,
+    operations: Action.actions.map((a) => a) as Operation[],
+  };
+
+}
+
+type DeployContract = {
   DeployContract: {
     code: Uint8Array;
   };
 };
 
-export type FunctionCall = {
+type FunctionCall = {
   FunctionCall: {
     methodName: string;
     args: Uint8Array;
@@ -70,33 +89,33 @@ export type FunctionCall = {
   };
 };
 
-export type Transfer = {
+type Transfer = {
   Transfer: {
     deposit: string;
   };
 };
 
-export type Stake = {
+type Stake = {
   Stake: {
     stake: number;
     publicKey: string;
   };
 };
 
-export type AddKey = {
+type AddKey = {
   AddKey: {
     publicKey: string;
     accessKey: AccessKey;
   };
 };
 
-export type DeleteKey = {
+type DeleteKey = {
   DeleteKey: {
     publicKey: string;
   };
 };
 
-export type DeleteAccount = {
+type DeleteAccount = {
   DeleteAccount: {
     beneficiaryId: string;
   };
@@ -117,7 +136,7 @@ export type AccessKey = {
   permission: string | AccessKeyFunctionCallPermission;
 }
 
-export type AccessKeyFunctionCallPermission = {
+type AccessKeyFunctionCallPermission = {
   FunctionCall: {
     allowance: string;
     receiverId: string;
