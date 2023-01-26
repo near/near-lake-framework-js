@@ -93,7 +93,7 @@ export function createBlock(streamerMessage: StreamerMessage): Block {
     return block;
 }
 
-export class BlockHeader {
+export type BlockHeader = {
     height: number;
     hash: string;
     prevHash: string;

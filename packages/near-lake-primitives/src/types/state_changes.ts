@@ -12,8 +12,8 @@ export class StateChange {
     get affectedAccountId(): string {
         return this.value.accountId;
     }
-
 }
+
 type TransactionProcessingCause = { txHash: string };
 type ActionReceiptProcessingStartedCause = { receiptHash: string }
 type ActionReceiptGasRewardCause = { receiptHash: string }

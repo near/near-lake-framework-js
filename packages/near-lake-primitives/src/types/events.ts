@@ -1,5 +1,5 @@
 
-export interface Event {
+export type Event = {
     relatedReceiptId: string;
     rawEvent: RawEvent;
 }
@@ -15,9 +15,9 @@ export const logToRawEvent = (log: string): RawEvent => {
     if (!log.startsWith('EVENT_JSON:')) {
         throw new Error('Log is not an event');
     }
-    
+
     const [event, standard, version, data] = log.split('EVENT_JSON:');
-    
+
     return {
         event,
         standard,
@@ -26,7 +26,7 @@ export const logToRawEvent = (log: string): RawEvent => {
     };
 };
 
-export interface Events {
+export type Events = {
     events: Array<Event>;
 }
 

@@ -1,7 +1,7 @@
 import { ExecutionStatus } from './core/types';
 import { Operation } from './receipts';
 
-export interface Transaction {
+export type Transaction = {
     readonly transactionHash: string;
     readonly signerId: string;
     readonly signerPublicKey: string;

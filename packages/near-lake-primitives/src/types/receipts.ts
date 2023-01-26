@@ -46,7 +46,7 @@ export const outcomeWithReceiptToReceipt = (outcomeWithReceipt: ExecutionOutcome
   );
 };
 
-export interface Action {
+export type Action = {
   readonly receiptId: string;
   readonly predecessorId: string;
   readonly receiverId: string;
@@ -112,12 +112,12 @@ export type Operation =
   | DeleteKey
   | DeleteAccount;
 
-export interface AccessKey {
+export type AccessKey = {
   nonce: number;
   permission: string | AccessKeyFunctionCallPermission;
 }
 
-export interface AccessKeyFunctionCallPermission {
+export type AccessKeyFunctionCallPermission = {
   FunctionCall: {
     allowance: string;
     receiverId: string;
