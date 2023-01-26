@@ -8,19 +8,6 @@ export interface BlockView {
     header: BlockHeader;
     chunks: ChunkHeader[];
 }
-
-export type ValidatorStake = {
-    accountId: string;
-    publicKey: string;
-    stake: string;
-    validatorStakeStructVersion: string;
-};
-
-export type ChallengeResult = {
-    accountId: string;
-    isDoubleSign: boolean;
-};
-
 export interface BlockHeader {
     author: any;
     approvals: (string | null)[];
@@ -61,10 +48,23 @@ export interface Shard {
     shardId: number;
     chunk?: ChunkView;
     receiptExecutionOutcomes: ExecutionOutcomeWithReceipt[];
-    stateChanges: StateChange[];
+    stateChanges: StateChangeWithCauseView[];
 }
 
-export interface ChunkHeader {
+export type ValidatorStakeView = {
+    accountId: string;
+    publicKey: string;
+    stake: string;
+    validatorStakeStructVersion: string;
+};
+
+type ChallengeResult = {
+    accountId: string;
+    isDoubleSign: boolean;
+};
+
+
+interface ChunkHeader {
     balanceBurnt: number;
     chunkHash: string;
     encodedLength: number;
@@ -85,7 +85,7 @@ export interface ChunkHeader {
     validatorReward: string;
 }
 
-export type ValidatorProposal = {
+type ValidatorProposal = {
     accountId: string;
     publicKey: string;
     stake: string;
@@ -93,32 +93,36 @@ export type ValidatorProposal = {
 };
 
 
-export interface ChunkView {
+interface ChunkView {
     author: string;
     header: ChunkHeader;
     receipts: ReceiptView[];
     transactions: IndexerTransactionWithOutcome[];
 }
 
-export type ReceiptEnum =
-    | {
-        Action: {
-            actions: ActionView[];
-            gasPrice: string;
-            inputDataIds: string[];
-            outputDataReceivers: DataReceiver[];
-            signerId: string;
-            signerPublicKey: string;
-        };
-    }
-    | {
-        Data: {
-            data: string;
-            dataId: string;
-        };
+export type ActionReceipt = {
+    Action: {
+        actions: ActionView[];
+        gasPrice: string;
+        inputDataIds: string[];
+        outputDataReceivers: DataReceiver[];
+        signerId: string;
+        signerPublicKey: string;
     };
+}
 
-export type DataReceiver = {
+export type DataReceipt = {
+    Data: {
+        data: string;
+        dataId: string;
+    };
+};
+
+type ReceiptEnum =
+    | ActionReceipt
+    | DataReceipt
+
+type DataReceiver = {
     dataId: string,
     receiverId: string,
 };
@@ -137,7 +141,7 @@ export type ExecutionStatus =
     | { Failure: string }
     | 'Postponed'
 
-export type ExecutionProof = {
+type ExecutionProof = {
     direction: string;
     hash: string;
 };
@@ -163,13 +167,13 @@ export type ExecutionOutcomeWithReceipt = {
     receipt: ReceiptView;
 };
 
-export type IndexerTransactionWithOutcome = {
+type IndexerTransactionWithOutcome = {
     transaction: Transaction;
     outcome: ExecutionOutcomeWithReceipt;
 };
 
 
-export type Transaction = {
+type Transaction = {
     signerId: string;
     publicKey: string;
     nonce: number;
@@ -179,13 +183,13 @@ export type Transaction = {
     hash: string;
 };
 
-export type DeployContractAction = {
+type DeployContractAction = {
     DeployContract: {
         code: string;
     };
 };
 
-export type FunctionCallAction = {
+type FunctionCallAction = {
     FunctionCall: {
         methodName: string;
         args: string;
@@ -194,32 +198,32 @@ export type FunctionCallAction = {
     };
 };
 
-export type TransferAction = {
+type TransferAction = {
     Transfer: {
         deposit: string;
     };
 };
 
-export type StakeAction = {
+type StakeAction = {
     Stake: {
         stake: number;
         publicKey: string;
     };
 };
 
-export type AddKeyAction = {
+type AddKeyAction = {
     AddKey: {
         publicKey: string;
         accessKey: AccessKey;
     };
 };
 
-export interface AccessKey {
+interface AccessKey {
     nonce: number;
     permission: string | AccessKeyFunctionCallPermission;
 }
 
-export interface AccessKeyFunctionCallPermission {
+interface AccessKeyFunctionCallPermission {
     FunctionCall: {
         allowance: string;
         receiverId: string;
@@ -227,19 +231,19 @@ export interface AccessKeyFunctionCallPermission {
     }
 }
 
-export type DeleteKeyAction = {
+type DeleteKeyAction = {
     DeleteKey: {
         publicKey: string;
     };
 };
 
-export type DeleteAccountAction = {
+type DeleteAccountAction = {
     DeleteAccount: {
         beneficiaryId: string;
     };
 };
 
-export type ActionView =
+type ActionView =
     | 'CreateAccount'
     | DeployContractAction
     | FunctionCallAction
@@ -250,12 +254,12 @@ export type ActionView =
     | DeleteAccountAction;
 
 
-export type StateChange = {
+export type StateChangeWithCauseView = {
     cause: {
         receiptHash: string;
         type: string;
     };
-    change: {
+    value: {
         accountId: string;
         keyBase64: string;
         valueBase64: string;
