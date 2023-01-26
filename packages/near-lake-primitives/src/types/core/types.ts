@@ -1,3 +1,5 @@
+export type BlockHeight = number;
+
 export interface StreamerMessage {
     block: BlockView;
     shards: Shard[];

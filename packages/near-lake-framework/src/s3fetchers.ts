@@ -9,10 +9,10 @@ import {
 
 import {
     BlockHeight,
-    Block,
+    BlockView,
     Shard,
     StreamerMessage,
-} from './types';
+} from '@near-lake/indexer-primitives';
 import { normalizeBlockHeight, parseBody } from './utils';
 
 // Queries the list of the objects in the bucket, grouped by "/" delimiter.
@@ -61,7 +61,7 @@ async function fetchBlock(
     client: S3Client,
     bucketName: string,
     blockHeight: BlockHeight
-): Promise<Block> {
+): Promise<BlockView> {
     let retryCount = 0;
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -73,7 +73,7 @@ async function fetchBlock(
                     RequestPayer: 'requester',
                 })
             );
-            const block: Block = await parseBody<Block>(data.Body as Readable);
+            const block: BlockView = await parseBody<BlockView>(data.Body as Readable);
             return block;
         } catch (err) {
             if (retryCount > 0) {

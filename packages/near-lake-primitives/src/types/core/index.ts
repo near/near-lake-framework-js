@@ -2,5 +2,7 @@ export {
     StreamerMessage,
     BlockView,
     BlockHeader,
-    Shard
+    Shard,
+    BlockHeight
 } from './types'
+

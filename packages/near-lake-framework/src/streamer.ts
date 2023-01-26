@@ -1,6 +1,7 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { listBlocks, fetchStreamerMessage } from './s3fetchers';
-import { LakeConfig, StreamerMessage } from './types';
+import { LakeConfig } from './types';
+import { StreamerMessage } from "@near-lake/indexer-primitives"
 import { sleep } from './utils';
 
 const FATAL_ERRORS = ['CredentialsProviderError'];
