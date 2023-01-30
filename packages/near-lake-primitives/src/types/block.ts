@@ -3,7 +3,7 @@ import { StreamerMessage, ValidatorStakeView } from './core/types';
 import { Receipt } from './receipts';
 import { Transaction } from './transactions';
 import { Event, logToRawEvent } from './events';
-import { fromStateChangeViewToStateChange, StateChange } from './state_changes';
+import { fromStateChangeViewToStateChange, StateChange } from './stateChanges';
 
 export class Block {
     readonly streamerMessage: StreamerMessage;
