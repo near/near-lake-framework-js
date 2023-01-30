@@ -1,5 +1,5 @@
 {
-  "name": "@near-lake/indexer-examples",
+  "name": "@near-lake/nft-indexer-example",
   "description": "Examples for near-lake-framework-js",
   "author": "NEAR Inc <hello@nearprotocol.com>",
   "private": true,
@@ -22,7 +22,7 @@
     "demo": "tsc && node dist/index.js"
   },
   "dependencies": {
-    "near-lake-framework": "file:../../packages/near-lake-framework"
+    "near-lake-framework": "file:../../../packages/near-lake-framework"
   },
   "devDependencies": {}
 }

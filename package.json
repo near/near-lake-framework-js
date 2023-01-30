@@ -6,7 +6,7 @@
   "license": "(MIT OR Apache-2.0)",
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/examples/*"
   ],
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "build": "turbo run build",
     "clean": "turbo run clean",
     "dev": "turbo run dev",
-    "demo": "turbo run demo"
+    "demo": "turbo run demo --filter=@near-lake/$npm_config_name-example"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.6",
