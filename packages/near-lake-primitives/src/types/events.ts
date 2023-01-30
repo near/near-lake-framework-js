@@ -11,9 +11,9 @@ type RawEvent = {
     data: JSON | undefined
 };
 
-export const logToRawEvent = (log: string): RawEvent => {
+export const logToRawEvent = (log: string): RawEvent | undefined => {
     if (!log.startsWith('EVENT_JSON:')) {
-        throw new Error('Log is not an event');
+        return
     }
 
     const [event, standard, version, data] = log.split('EVENT_JSON:');
