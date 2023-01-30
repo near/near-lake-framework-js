@@ -31,10 +31,11 @@ interface MintbaseEventLogData {
 }
 
 async function handleStreamerMessage(
-    streamerMessage: types.StreamerMessage
+    block: types.Block,
+    _ctx: types.LakeContext
 ): Promise<void> {
-    const createdOn = new Date(streamerMessage.block.header.timestamp / 1000000);
-    const relevantOutcomes = streamerMessage
+    const createdOn = new Date(block.streamerMessage.block.header.timestamp / 1000000);
+    const relevantOutcomes = block.streamerMessage
         .shards
         .flatMap(shard => shard.receiptExecutionOutcomes)
         .map(outcome => ({
@@ -100,7 +101,7 @@ async function handleStreamerMessage(
 
     }
     if (output.length) {
-        console.log('We caught freshly minted NFTs!');
+        console.log('We caught freshly minted NFTs on the new version!');
         console.dir(output, { depth: 5 });
     }
 }

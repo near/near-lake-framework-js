@@ -1,5 +1,5 @@
 import { CredentialProvider } from '@aws-sdk/types';
-import { StreamerMessage as StreamerMessageType } from '@near-lake/indexer-primitives';
+import { StreamerMessage as StreamerMessageType, Block as BlockType, LakeContext as LakeContextType } from '@near-lake/indexer-primitives';
 export type BlockHeight = number;
 
 export interface EndpointConfig {
@@ -20,3 +20,5 @@ export interface LakeConfig {
 }
 
 export type StreamerMessage = StreamerMessageType;
+export type Block = BlockType;
+export type LakeContext = LakeContextType
