@@ -7,10 +7,10 @@ export interface StreamerMessage {
 
 export interface BlockView {
     author: string;
-    header: BlockHeader;
+    header: BlockHeaderView;
     chunks: ChunkHeader[];
 }
-export interface BlockHeader {
+export interface BlockHeaderView {
     author: any;
     approvals: (string | null)[];
     blockMerkleRoot: string;

@@ -1,7 +1,7 @@
 export {
     StreamerMessage,
     BlockView,
-    BlockHeader,
+    BlockHeaderView,
     Shard,
     BlockHeight
 } from './types'
