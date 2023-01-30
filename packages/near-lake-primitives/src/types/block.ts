@@ -53,13 +53,6 @@ export class Block {
         return actions
     }
 
-    receiptsOnAccountId() {
-        // I would like to know all receipts executed on near.social
-    }
-
-    actionsOnAccountId() {
-        // I would like to know all actions executed on near.social
-    }
     events(): Event[] {
         const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.map(logToRawEvent).map((rawEvent) => {
             if (rawEvent) {
