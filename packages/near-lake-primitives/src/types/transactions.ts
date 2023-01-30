@@ -9,6 +9,6 @@ export type Transaction = {
     readonly receiverId: string;
     readonly status: ExecutionStatus;
     readonly executionOutcomeId: string;
-    readonly operations: Array<Operation>;
+    readonly operations: Operation[];
 }
 

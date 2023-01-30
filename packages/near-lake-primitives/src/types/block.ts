@@ -7,16 +7,16 @@ import { fromStateChangeViewToStateChange, StateChange } from './state_changes';
 
 export class Block {
     readonly streamerMessage: StreamerMessage;
-    private executedReceipts: Array<Receipt>;
-    readonly postponedReceipts: Array<Receipt>;
-    readonly transactions: Array<Transaction>;
+    private executedReceipts: Receipt[];
+    readonly postponedReceipts: Receipt[];
+    readonly transactions: Transaction[];
     private _actions: Map<string, Action>;
-    private _events: Map<string, Array<Event>>;
-    private _stateChanges: Array<StateChange>;
+    private _events: Map<string, Event[]>;
+    private _stateChanges: StateChange[];
 
     constructor(streamerMessage: StreamerMessage, executedReceipts: Receipt[], postponedReceipts: Receipt[],
-        transactions: Array<Transaction>, actions: Map<string, Action>,
-        events: Map<string, Array<Event>>, stateChanges: Array<StateChange>) {
+        transactions: Transaction[], actions: Map<string, Action>,
+        events: Map<string, Event[]>, stateChanges: StateChange[]) {
         this.streamerMessage = streamerMessage;
         this.executedReceipts = executedReceipts;
         this.postponedReceipts = postponedReceipts;
@@ -41,7 +41,7 @@ export class Block {
         return streamerMessageToBlockHeader(this.streamerMessage);
     }
 
-    receipts(): Array<Receipt> {
+    receipts(): Receipt[] {
         if (this.executedReceipts.length == 0) {
             this.executedReceipts = this.streamerMessage.shards.flatMap((shard) => shard.receiptExecutionOutcomes).map((executionReceipt) => outcomeWithReceiptToReceipt(executionReceipt))
         }
@@ -53,6 +53,13 @@ export class Block {
         return actions
     }
 
+    receiptsOnAccountId() {
+        // I would like to know all receipts executed on near.social
+    }
+
+    actionsOnAccountId() {
+        // I would like to know all actions executed on near.social
+    }
     events(): Event[] {
         const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.map(logToRawEvent).map((rawEvent) => {
             if (rawEvent) {
@@ -77,14 +84,14 @@ export class Block {
         return this._actions.get(receipt_id);
     }
 
-    eventsByReceiptId(receipt_id: string): Array<Event> {
+    eventsByReceiptId(receipt_id: string): Event[] {
         if (this._events.size == 0) {
             this.buildEventsHashmap()
         }
         return this._events.get(receipt_id) || [];
     }
 
-    eventsByAccountId(account_id: string): Array<Event> {
+    eventsByAccountId(account_id: string): Event[] {
         return this.events().filter((event) => {
             const action = this.actionByReceiptId(event.relatedReceiptId)
             if (action !== undefined && action?.receiverId == account_id || action?.signerId == account_id) {
@@ -103,8 +110,8 @@ export class Block {
         this._actions = actions
     }
 
-    private buildEventsHashmap(): Map<string, Array<Event>> {
-        const events = new Map<string, Array<Event>>();
+    private buildEventsHashmap(): Map<string, Event[]> {
+        const events = new Map<string, Event[]>();
         for (const receipt of this.executedReceipts) {
             events.set(receipt.receiptId, receipt.events);
         }
@@ -114,7 +121,7 @@ export class Block {
 
 }
 
-export function createBlock(streamerMessage: StreamerMessage): Block {
+export function streamerMessageToBlock(streamerMessage: StreamerMessage): Block {
     const block: Block = new Block(streamerMessage, [], [], [], new Map(), new Map(), []);
     return block;
 }
@@ -132,7 +139,7 @@ export type BlockHeader = {
     latestProtocolVersion: number;
     randomValue: string;
     chunksIncluded: number;
-    validatorProposals: Array<ValidatorStakeView>;
+    validatorProposals: ValidatorStakeView[];
 }
 
 function streamerMessageToBlockHeader(streamerMessage: StreamerMessage): BlockHeader {

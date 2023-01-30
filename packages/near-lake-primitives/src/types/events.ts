@@ -27,7 +27,7 @@ export const logToRawEvent = (log: string): RawEvent => {
 };
 
 export type Events = {
-    events: Array<Event>;
+    events: Event[];
 }
 
 export const logToEvent = (log: string): Event => {
