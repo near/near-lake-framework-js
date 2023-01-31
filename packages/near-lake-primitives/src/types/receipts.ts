@@ -3,7 +3,6 @@ import { ExecutionOutcomeWithReceipt, ExecutionStatus, ReceiptView, ActionReceip
 import { Events, Event } from './events';
 
 export class Receipt implements Events {
-
   constructor(readonly receiptKind: ReceiptKind, readonly receiptId: string, readonly receiverId: string, readonly predecessorId: string, readonly status: ExecutionStatus, readonly executionOutcomeId?: string | undefined, readonly logs: string[] = []) { }
 
   get events(): Event[] {
@@ -53,51 +52,32 @@ export class Action {
   }
 };
 
-type DeployContract = {
-  DeployContract: {
-    code: Uint8Array;
-  };
+class DeployContract {
+  constructor(readonly code: Uint8Array) { }
 };
 
-type FunctionCall = {
-  FunctionCall: {
-    methodName: string;
-    args: Uint8Array;
-    gas: number;
-    deposit: string;
-  };
+class FunctionCall {
+  constructor(readonly methodName: string, readonly args: Uint8Array, readonly gas: number, readonly deposit: string) { }
 };
 
-type Transfer = {
-  Transfer: {
-    deposit: string;
-  };
+class Transfer {
+  constructor(readonly deposit: string) { }
 };
 
-type Stake = {
-  Stake: {
-    stake: number;
-    publicKey: string;
-  };
+class Stake {
+  constructor(readonly stake: number, readonly publicKey: string) { }
 };
 
-type AddKey = {
-  AddKey: {
-    publicKey: string;
-    accessKey: AccessKey;
-  };
+class AddKey {
+  constructor(readonly publicKey: string, readonly accessKey: AccessKey) { }
 };
 
-type DeleteKey = {
-  DeleteKey: {
-    publicKey: string;
-  };
+class DeleteKey {
+  constructor(readonly publicKey: string) { }
 };
 
-type DeleteAccount = {
-  DeleteAccount: {
-    beneficiaryId: string;
-  };
+class DeleteAccount {
+  constructor(readonly beneficiaryId: string) { }
 };
 
 export type Operation =
@@ -110,16 +90,11 @@ export type Operation =
   | DeleteKey
   | DeleteAccount;
 
-export type AccessKey = {
-  nonce: number;
-  permission: string | AccessKeyFunctionCallPermission;
+export class AccessKey {
+  constructor(readonly nonce: number, readonly permission: string | AccessKeyFunctionCallPermission) { }
 }
 
-type AccessKeyFunctionCallPermission = {
-  FunctionCall: {
-    allowance: string;
-    receiverId: string;
-    methodNames: string[];
-  }
+class AccessKeyFunctionCallPermission {
+  constructor(readonly allowance: string, readonly receiverId: string, readonly methodNames: string[]) { }
 }
 
