@@ -2,7 +2,7 @@ import { StateChangeWithCauseView } from './core/types';
 import { AccessKey } from './receipts';
 
 export class StateChange {
-    
+
     constructor(readonly cause: StateChangeCause, readonly value: StateChangeValue) {}
 
     get affectedAccountId(): string {
@@ -34,51 +34,39 @@ type StateChangeCause =
     'Migration' |
     'Resharding'
 
-type AccountUpdateValue = {
-    accountId: string,
-    account: Account
+class AccountUpdateValue {
+    constructor(readonly accountId: string, readonly account: Account) {}
 }
-type AccountDeletionValue = {
-    accountId: string,
-}
-
-type AccountKeyUpdateValue = {
-    accountId: string,
-    publicKey: string,
-    AccessKey: AccessKey
+class AccountDeletionValue {
+    constructor(readonly accountId: string) {}
 }
 
-type AccessKeyDeletionValue = {
-    accountId: string,
-    publicKey: string,
+class AccountKeyUpdateValue {
+    constructor(readonly accountId: string, readonly publicKey: string, readonly accessKey: AccessKey) {}
 }
 
-type DataUpdateValue = {
-    accountId: string,
-    key: Uint8Array,
-    value: Uint8Array,
+class AccessKeyDeletionValue  {
+    constructor(readonly accountId: string, readonly publicKey: string) {}
 }
 
-type DataDeletionValue = {
-    accountId: string,
-    key: Uint8Array,
+class DataUpdateValue  {
+    constructor(readonly accountId: string, readonly key: Uint8Array, readonly value: Uint8Array) {}
 }
 
-type ContractCodeUpdateValue = {
-    accountId: string,
-    code: Uint8Array
+class DataDeletionValue  {
+    constructor(readonly accountId: string, readonly key: Uint8Array) {}
 }
 
-type ContractCodeDeletionValue = {
-    accountId: string,
+class ContractCodeUpdateValue  {
+    constructor(readonly accountId: string, readonly code: Uint8Array) {}
+}
+
+class ContractCodeDeletionValue  {
+    constructor(readonly accountId: string) {}
 }
 
 type StateChangeValue = AccountUpdateValue | AccountDeletionValue | AccountKeyUpdateValue | AccessKeyDeletionValue | DataUpdateValue | DataDeletionValue | ContractCodeUpdateValue | ContractCodeDeletionValue
 
-type Account = {
-    amount: number,
-    locked: number,
-    codeHash: string,
-    storageUsage: number,
-    storagePaidAt: number,
+class Account {
+    constructor(readonly amount: number, readonly locked: number, readonly codeHash: string, readonly storageUsage: number, readonly storagePaidAt: number) {}
 }
