@@ -2,7 +2,7 @@ import { Action, Receipt } from './receipts';
 import { StreamerMessage, ValidatorStakeView } from './core/types';
 import { Transaction } from './transactions';
 import { Event, logToRawEvent } from './events';
-import { fromStateChangeViewToStateChange, StateChange } from './stateChanges';
+import { StateChange } from './stateChanges';
 
 export class Block {
     readonly streamerMessage: StreamerMessage;
@@ -75,7 +75,7 @@ export class Block {
         if (this._stateChanges.length == 0) {
             this._stateChanges = this.streamerMessage.shards
                 .flatMap((shard) => shard.stateChanges)
-                .map(fromStateChangeViewToStateChange)
+                .map(StateChange.fromStateChangeView)
         }
         return this._stateChanges
     }

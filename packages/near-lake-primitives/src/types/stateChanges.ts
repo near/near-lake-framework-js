@@ -13,11 +13,11 @@ export class StateChange {
     get affectedAccountId(): string {
         return this.value.accountId;
     }
-}
 
-export function fromStateChangeViewToStateChange(stateChangeView: StateChangeWithCauseView) {
-    let { cause, value } = stateChangeView;
-    return new StateChange(cause, value)
+    static fromStateChangeView(stateChangeView: StateChangeWithCauseView) {
+        let { cause, value } = stateChangeView;
+        return new StateChange(cause, value)
+    }
 }
 
 type TransactionProcessingCause = { txHash: string };
