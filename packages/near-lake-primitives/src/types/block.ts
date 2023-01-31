@@ -122,12 +122,14 @@ export class Block {
     }
 
 
+    static fromStreamerMessage(streamerMessage: StreamerMessage): Block {
+        const block: Block = new Block(streamerMessage, [], [], [], new Map(), new Map(), []);
+        return block;
+    }
+
+
 }
 
-export function streamerMessageToBlock(streamerMessage: StreamerMessage): Block {
-    const block: Block = new Block(streamerMessage, [], [], [], new Map(), new Map(), []);
-    return block;
-}
 
 export class BlockHeader {
     readonly height: number;
