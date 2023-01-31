@@ -5,21 +5,18 @@ import { Event, RawEvent } from './events';
 import { StateChange } from './stateChanges';
 
 export class Block {
-    readonly streamerMessage: StreamerMessage;
-    private executedReceipts: Receipt[];
-    readonly postponedReceipts: Receipt[];
-    readonly transactions: Transaction[];
     private _actions: Map<string, Action>;
     private _events: Map<string, Event[]>;
     private _stateChanges: StateChange[];
 
-    constructor(streamerMessage: StreamerMessage, executedReceipts: Receipt[], postponedReceipts: Receipt[],
-        transactions: Transaction[], actions: Map<string, Action>,
-        events: Map<string, Event[]>, stateChanges: StateChange[]) {
-        this.streamerMessage = streamerMessage;
-        this.executedReceipts = executedReceipts;
-        this.postponedReceipts = postponedReceipts;
-        this.transactions = transactions;
+    constructor(
+        readonly streamerMessage: StreamerMessage,
+        private executedReceipts: Receipt[],
+        readonly postponedReceipts: Receipt[],
+        readonly transactions: Transaction[],
+        actions: Map<string, Action>,
+        events: Map<string, Event[]>,
+        stateChanges: StateChange[]) {
         this._actions = actions;
         this._events = events;
         this._stateChanges = stateChanges;
@@ -67,7 +64,7 @@ export class Block {
             } else {
                 return null
             }
-        })).filter((event: Event | null) => event !== null).map((event) => event as Event)
+        })).filter((event: Event | null): event is Event => event !== null)
         return events
     }
 
@@ -132,56 +129,25 @@ export class Block {
 
 
 export class BlockHeader {
-    readonly height: number;
-    readonly hash: string;
-    readonly prevHash: string;
-    readonly author: string;
-    readonly timestampNanosec: string;
-    readonly epochId: string;
-    readonly nextEpochId: string;
-    readonly gasPrice: string;
-    readonly totalSupply: string;
-    readonly latestProtocolVersion: number;
-    readonly randomValue: string;
-    readonly chunksIncluded: number;
-    readonly validatorProposals: ValidatorStakeView[];
 
-    constructor(height: number, hash: string, prevHash: string, author: string, timestampNanosec: string, epochId: string, nextEpochId: string, gasPrice: string, totalSupply: string, latestProtocolVersion: number, randomValue: string, chunksIncluded: number, validatorProposals: ValidatorStakeView[]) {
-        this.height = height;
-        this.hash = hash;
-        this.prevHash = prevHash;
-        this.author = author;
-        this.timestampNanosec = timestampNanosec;
-        this.epochId = epochId;
-        this.nextEpochId = nextEpochId;
-        this.gasPrice = gasPrice;
-        this.totalSupply = totalSupply;
-        this.latestProtocolVersion = latestProtocolVersion;
-        this.randomValue = randomValue;
-        this.chunksIncluded = chunksIncluded;
-        this.validatorProposals = validatorProposals;
-    }
-
+    constructor(readonly height: number, readonly hash: string, readonly prevHash: string, readonly author: string, readonly timestampNanosec: string, readonly epochId: string, readonly nextEpochId: string, readonly gasPrice: string, readonly totalSupply: string, readonly latestProtocolVersion: number, readonly randomValue: string, readonly chunksIncluded: number, readonly validatorProposals: ValidatorStakeView[]) { }
 
     static fromStreamerMessage(streamerMessage: StreamerMessage): BlockHeader {
-        const blockHeader: BlockHeader = {
-            height: streamerMessage.block.header.height,
-            hash: streamerMessage.block.header.hash,
-            prevHash: streamerMessage.block.header.prevHash,
-            author: streamerMessage.block.author,
-            timestampNanosec: streamerMessage.block.header.timestampNanosec,
-            epochId: streamerMessage.block.header.epochId,
-            nextEpochId: streamerMessage.block.header.nextEpochId,
-            gasPrice: streamerMessage.block.header.gasPrice,
-            totalSupply: streamerMessage.block.header.totalSupply,
-            latestProtocolVersion: streamerMessage.block.header.latestProtocolVersion,
-            randomValue: streamerMessage.block.header.randomValue,
-            chunksIncluded: streamerMessage.block.header.chunksIncluded,
-            validatorProposals: streamerMessage.block.header.validatorProposals,
-        };
-
-        return blockHeader;
-
+        return new BlockHeader(
+            streamerMessage.block.header.height,
+            streamerMessage.block.header.hash,
+            streamerMessage.block.header.prevHash,
+            streamerMessage.block.author,
+            streamerMessage.block.header.timestampNanosec,
+            streamerMessage.block.header.epochId,
+            streamerMessage.block.header.nextEpochId,
+            streamerMessage.block.header.gasPrice,
+            streamerMessage.block.header.totalSupply,
+            streamerMessage.block.header.latestProtocolVersion,
+            streamerMessage.block.header.randomValue,
+            streamerMessage.block.header.chunksIncluded,
+            streamerMessage.block.header.validatorProposals,
+        );
     }
 }
 
