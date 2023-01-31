@@ -43,33 +43,44 @@ export class Block {
 
     receipts(): Receipt[] {
         if (this.executedReceipts.length == 0) {
-            this.executedReceipts = this.streamerMessage.shards.flatMap((shard) => shard.receiptExecutionOutcomes).map((executionReceipt) => outcomeWithReceiptToReceipt(executionReceipt))
+            this.executedReceipts = this.streamerMessage.shards
+                .flatMap((shard) => shard.receiptExecutionOutcomes)
+                .map((executionReceipt) => outcomeWithReceiptToReceipt(executionReceipt))
         }
         return this.executedReceipts;
     }
 
     actions(): Action[] {
-        const actions: Action[] = this.streamerMessage.shards.flatMap((shard) => shard.receiptExecutionOutcomes).filter((exeuctionOutcomeWithReceipt) => isActionReceipt(exeuctionOutcomeWithReceipt.receipt)).map((exeuctionOutcomeWithReceipt) => receiptViewToAction(exeuctionOutcomeWithReceipt.receipt)).filter((action) => action !== null).map(action => action as Action)
+        const actions: Action[] = this.streamerMessage.shards
+            .flatMap((shard) => shard.receiptExecutionOutcomes)
+            .filter((exeuctionOutcomeWithReceipt) => isActionReceipt(exeuctionOutcomeWithReceipt.receipt))
+            .map((exeuctionOutcomeWithReceipt) => receiptViewToAction(exeuctionOutcomeWithReceipt.receipt))
+            .filter((action) => action !== null)
+            .map(action => action as Action)
         return actions
     }
 
     events(): Event[] {
         const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.map(logToRawEvent).map((rawEvent) => {
             if (rawEvent) {
-                let event = { relatedReceiptId: executedReceipt.receiptId, rawEvent: rawEvent } as Event
+                let event: Event = { relatedReceiptId: executedReceipt.receiptId, rawEvent: rawEvent }
                 return event
             } else {
                 return null
             }
-        })).filter((event) => event !== null).map((event) => event as Event)
+        })).filter((event: Event | null) => event !== null).map((event) => event as Event)
         return events
     }
+
     stateChanges(): StateChange[] {
         if (this._stateChanges.length == 0) {
-            this._stateChanges = this.streamerMessage.shards.flatMap((shard) => shard.stateChanges).map(fromStateChangeViewToStateChange)
+            this._stateChanges = this.streamerMessage.shards
+                .flatMap((shard) => shard.stateChanges)
+                .map(fromStateChangeViewToStateChange)
         }
         return this._stateChanges
     }
+
     actionByReceiptId(receipt_id: string): Action | undefined {
         if (this._actions.size == 0) {
             this.buildActionsHashmap()
