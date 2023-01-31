@@ -38,7 +38,7 @@ export class Block {
     }
 
     header(): BlockHeader {
-        return streamerMessageToBlockHeader(this.streamerMessage);
+        return BlockHeader.fromStreamerMessage(this.streamerMessage);
     }
 
     receipts(): Receipt[] {
@@ -130,41 +130,60 @@ export function streamerMessageToBlock(streamerMessage: StreamerMessage): Block 
     return block;
 }
 
-export type BlockHeader = {
-    height: number;
-    hash: string;
-    prevHash: string;
-    author: string;
-    timestampNanosec: string;
-    epochId: string;
-    nextEpochId: string;
-    gasPrice: string;
-    totalSupply: string;
-    latestProtocolVersion: number;
-    randomValue: string;
-    chunksIncluded: number;
-    validatorProposals: ValidatorStakeView[];
+export class BlockHeader {
+    readonly height: number;
+    readonly hash: string;
+    readonly prevHash: string;
+    readonly author: string;
+    readonly timestampNanosec: string;
+    readonly epochId: string;
+    readonly nextEpochId: string;
+    readonly gasPrice: string;
+    readonly totalSupply: string;
+    readonly latestProtocolVersion: number;
+    readonly randomValue: string;
+    readonly chunksIncluded: number;
+    readonly validatorProposals: ValidatorStakeView[];
+
+    constructor(height: number, hash: string, prevHash: string, author: string, timestampNanosec: string, epochId: string, nextEpochId: string, gasPrice: string, totalSupply: string, latestProtocolVersion: number, randomValue: string, chunksIncluded: number, validatorProposals: ValidatorStakeView[]) {
+        this.height = height;
+        this.hash = hash;
+        this.prevHash = prevHash;
+        this.author = author;
+        this.timestampNanosec = timestampNanosec;
+        this.epochId = epochId;
+        this.nextEpochId = nextEpochId;
+        this.gasPrice = gasPrice;
+        this.totalSupply = totalSupply;
+        this.latestProtocolVersion = latestProtocolVersion;
+        this.randomValue = randomValue;
+        this.chunksIncluded = chunksIncluded;
+        this.validatorProposals = validatorProposals;
+    }
+
+
+    static fromStreamerMessage(streamerMessage: StreamerMessage): BlockHeader {
+        const blockHeader: BlockHeader = {
+            height: streamerMessage.block.header.height,
+            hash: streamerMessage.block.header.hash,
+            prevHash: streamerMessage.block.header.prevHash,
+            author: streamerMessage.block.author,
+            timestampNanosec: streamerMessage.block.header.timestampNanosec,
+            epochId: streamerMessage.block.header.epochId,
+            nextEpochId: streamerMessage.block.header.nextEpochId,
+            gasPrice: streamerMessage.block.header.gasPrice,
+            totalSupply: streamerMessage.block.header.totalSupply,
+            latestProtocolVersion: streamerMessage.block.header.latestProtocolVersion,
+            randomValue: streamerMessage.block.header.randomValue,
+            chunksIncluded: streamerMessage.block.header.chunksIncluded,
+            validatorProposals: streamerMessage.block.header.validatorProposals,
+        };
+
+        return blockHeader;
+
+    }
 }
 
-function streamerMessageToBlockHeader(streamerMessage: StreamerMessage): BlockHeader {
-    const blockHeader: BlockHeader = {
-        height: streamerMessage.block.header.height,
-        hash: streamerMessage.block.header.hash,
-        prevHash: streamerMessage.block.header.prevHash,
-        author: streamerMessage.block.author,
-        timestampNanosec: streamerMessage.block.header.timestampNanosec,
-        epochId: streamerMessage.block.header.epochId,
-        nextEpochId: streamerMessage.block.header.nextEpochId,
-        gasPrice: streamerMessage.block.header.gasPrice,
-        totalSupply: streamerMessage.block.header.totalSupply,
-        latestProtocolVersion: streamerMessage.block.header.latestProtocolVersion,
-        randomValue: streamerMessage.block.header.randomValue,
-        chunksIncluded: streamerMessage.block.header.chunksIncluded,
-        validatorProposals: streamerMessage.block.header.validatorProposals,
-    };
 
-    return blockHeader;
-
-}
 
 
