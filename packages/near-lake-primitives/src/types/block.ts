@@ -1,6 +1,5 @@
-import { Action, isActionReceipt, outcomeWithReceiptToReceipt, receiptViewToAction } from './receipts';
+import { Action, Receipt } from './receipts';
 import { StreamerMessage, ValidatorStakeView } from './core/types';
-import { Receipt } from './receipts';
 import { Transaction } from './transactions';
 import { Event, logToRawEvent } from './events';
 import { fromStateChangeViewToStateChange, StateChange } from './stateChanges';
@@ -45,7 +44,7 @@ export class Block {
         if (this.executedReceipts.length == 0) {
             this.executedReceipts = this.streamerMessage.shards
                 .flatMap((shard) => shard.receiptExecutionOutcomes)
-                .map((executionReceipt) => outcomeWithReceiptToReceipt(executionReceipt))
+                .map((executionReceipt) => Receipt.fromOutcomeWithReceipt(executionReceipt))
         }
         return this.executedReceipts;
     }
@@ -53,8 +52,8 @@ export class Block {
     actions(): Action[] {
         const actions: Action[] = this.streamerMessage.shards
             .flatMap((shard) => shard.receiptExecutionOutcomes)
-            .filter((exeuctionOutcomeWithReceipt) => isActionReceipt(exeuctionOutcomeWithReceipt.receipt))
-            .map((exeuctionOutcomeWithReceipt) => receiptViewToAction(exeuctionOutcomeWithReceipt.receipt))
+            .filter((exeuctionOutcomeWithReceipt) => Action.isActionReceipt(exeuctionOutcomeWithReceipt.receipt))
+            .map((exeuctionOutcomeWithReceipt) => Action.fromReceiptView(exeuctionOutcomeWithReceipt.receipt))
             .filter((action) => action !== null)
             .map(action => action as Action)
         return actions

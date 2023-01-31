@@ -26,6 +26,19 @@ export class Receipt implements Events {
     return this.logs.map(logToEvent);
   }
 
+  static fromOutcomeWithReceipt = (outcomeWithReceipt: ExecutionOutcomeWithReceipt): Receipt => {
+    const kind = 'Action' in outcomeWithReceipt.receipt ? ReceiptKind.Action : ReceiptKind.Data
+    return new Receipt(
+      kind,
+      outcomeWithReceipt.receipt.receiptId,
+      outcomeWithReceipt.receipt?.receiverId,
+      outcomeWithReceipt.receipt?.predecessorId,
+      outcomeWithReceipt.executionOutcome.outcome.status,
+      outcomeWithReceipt.executionOutcome.id,
+      outcomeWithReceipt.executionOutcome.outcome.logs,
+    );
+  };
+
 }
 
 export enum ReceiptKind {
@@ -33,46 +46,42 @@ export enum ReceiptKind {
   Data = 'Data',
 }
 
-export const outcomeWithReceiptToReceipt = (outcomeWithReceipt: ExecutionOutcomeWithReceipt): Receipt => {
-  const kind = 'Action' in outcomeWithReceipt.receipt ? ReceiptKind.Action : ReceiptKind.Data
-  return new Receipt(
-    kind,
-    outcomeWithReceipt.receipt.receiptId,
-    outcomeWithReceipt.receipt?.receiverId,
-    outcomeWithReceipt.receipt?.predecessorId,
-    outcomeWithReceipt.executionOutcome.outcome.status,
-    outcomeWithReceipt.executionOutcome.id,
-    outcomeWithReceipt.executionOutcome.outcome.logs,
-  );
-};
 
-export type Action = {
+export class Action {
   readonly receiptId: string;
   readonly predecessorId: string;
   readonly receiverId: string;
   readonly signerId: string;
   readonly signerPublicKey: string;
   readonly operations: Operation[];
+
+  constructor(receiptId: string, predecessorId: string, receiverId: string, signerId: string, signerPublicKey: string, operations: Operation[]) {
+    this.receiptId = receiptId;
+    this.predecessorId = predecessorId;
+    this.receiverId = receiverId;
+    this.signerId = signerId;
+    this.signerPublicKey = signerPublicKey;
+    this.operations = operations;
+  }
+
+  static isActionReceipt = (receipt: ReceiptView) => {
+    if (typeof receipt.receipt === "object" && receipt.receipt.constructor.name === "ActionReceipt") return true
+    return true
+  }
+
+  static fromReceiptView = (receipt: ReceiptView): Action | null => {
+    if (!this.isActionReceipt(receipt)) return null
+    const { Action } = receipt.receipt as ActionReceipt;
+    return {
+      receiptId: receipt.receiptId,
+      predecessorId: receipt.predecessorId,
+      receiverId: receipt.receiverId,
+      signerId: Action.signerId,
+      signerPublicKey: Action.signerPublicKey,
+      operations: Action.actions.map((a) => a) as Operation[],
+    };
+  }
 };
-
-export function isActionReceipt(receipt: ReceiptView) {
-  if (typeof receipt.receipt === "object" && receipt.receipt.constructor.name === "ActionReceipt") return true
-  return true
-}
-
-export function receiptViewToAction(receipt: ReceiptView): Action | null {
-  if (!isActionReceipt(receipt)) return null
-  const { Action } = receipt.receipt as ActionReceipt;
-  return {
-    receiptId: receipt.receiptId,
-    predecessorId: receipt.predecessorId,
-    receiverId: receipt.receiverId,
-    signerId: Action.signerId,
-    signerPublicKey: Action.signerPublicKey,
-    operations: Action.actions.map((a) => a) as Operation[],
-  };
-
-}
 
 type DeployContract = {
   DeployContract: {
