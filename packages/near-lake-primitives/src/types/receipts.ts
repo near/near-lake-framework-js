@@ -3,26 +3,11 @@ import { ExecutionOutcomeWithReceipt, ExecutionStatus, ReceiptView, ActionReceip
 import { Events, Event } from './events';
 
 export class Receipt implements Events {
-  readonly receiptKind: ReceiptKind;
-  readonly receiptId: string;
-  readonly receiverId: string;
-  readonly predecessorId: string;
-  readonly status: ExecutionStatus;
-  readonly executionOutcomeId?: string | undefined;
-  readonly logs: string[];
 
-  constructor(receiptKind: ReceiptKind, receiptId: string, receiverId: string, predecessorId: string, status: ExecutionStatus, executionOutcomeId?: string, logs?: string[]) {
-    this.receiptKind = receiptKind;
-    this.receiptId = receiptId;
-    this.receiverId = receiverId;
-    this.predecessorId = predecessorId;
-    this.executionOutcomeId = executionOutcomeId;
-    this.logs = logs || [];
-    this.status = status;
-  }
+  constructor(readonly receiptKind: ReceiptKind, readonly receiptId: string, readonly receiverId: string, readonly predecessorId: string, readonly status: ExecutionStatus, readonly executionOutcomeId?: string | undefined, readonly logs: string[] = []) { }
 
   get events(): Event[] {
-    return this.logs.map(Event.fromLog);
+    return this.logs.map(Event.fromLog).filter((e): e is Event => e !== undefined);
   }
 
   static fromOutcomeWithReceipt = (outcomeWithReceipt: ExecutionOutcomeWithReceipt): Receipt => {
@@ -45,23 +30,9 @@ export enum ReceiptKind {
   Data = 'Data',
 }
 
-
 export class Action {
-  readonly receiptId: string;
-  readonly predecessorId: string;
-  readonly receiverId: string;
-  readonly signerId: string;
-  readonly signerPublicKey: string;
-  readonly operations: Operation[];
 
-  constructor(receiptId: string, predecessorId: string, receiverId: string, signerId: string, signerPublicKey: string, operations: Operation[]) {
-    this.receiptId = receiptId;
-    this.predecessorId = predecessorId;
-    this.receiverId = receiverId;
-    this.signerId = signerId;
-    this.signerPublicKey = signerPublicKey;
-    this.operations = operations;
-  }
+  constructor(readonly receiptId: string, readonly predecessorId: string, readonly receiverId: string, readonly signerId: string, readonly signerPublicKey: string, readonly operations: Operation[]) { }
 
   static isActionReceipt = (receipt: ReceiptView) => {
     if (typeof receipt.receipt === "object" && receipt.receipt.constructor.name === "ActionReceipt") return true

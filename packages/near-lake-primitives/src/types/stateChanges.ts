@@ -2,13 +2,8 @@ import { StateChangeWithCauseView } from './core/types';
 import { AccessKey } from './receipts';
 
 export class StateChange {
-    readonly cause: StateChangeCause;
-    readonly value: StateChangeValue;
-
-    constructor(cause: StateChangeCause, value: StateChangeValue) {
-        this.cause = cause;
-        this.value = value;
-    }
+    
+    constructor(readonly cause: StateChangeCause, readonly value: StateChangeValue) {}
 
     get affectedAccountId(): string {
         return this.value.accountId;
