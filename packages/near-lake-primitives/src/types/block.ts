@@ -1,7 +1,7 @@
 import { Action, Receipt } from './receipts';
 import { StreamerMessage, ValidatorStakeView } from './core/types';
 import { Transaction } from './transactions';
-import { Event, logToRawEvent } from './events';
+import { Event, RawEvent } from './events';
 import { StateChange } from './stateChanges';
 
 export class Block {
@@ -60,7 +60,7 @@ export class Block {
     }
 
     events(): Event[] {
-        const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.map(logToRawEvent).map((rawEvent) => {
+        const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.map(RawEvent.fromLog).map((rawEvent) => {
             if (rawEvent) {
                 let event: Event = { relatedReceiptId: executedReceipt.receiptId, rawEvent: rawEvent }
                 return event

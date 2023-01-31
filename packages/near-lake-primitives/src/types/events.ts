@@ -1,35 +1,47 @@
 
-export type Event = {
-    relatedReceiptId: string;
-    rawEvent: RawEvent;
-}
+export class Event {
+    readonly relatedReceiptId: string;
+    readonly rawEvent: RawEvent;
 
-type RawEvent = {
-    event: string,
-    standard: string,
-    version: string,
-    data: JSON | undefined
-};
-
-export const logToRawEvent = (log: string): RawEvent | undefined => {
-    if (!log.startsWith('EVENT_JSON:')) {
-        return
+    constructor(relatedReceiptId: string, rawEvent: RawEvent) {
+        this.relatedReceiptId = relatedReceiptId;
+        this.rawEvent = rawEvent;
     }
 
-    const [event, standard, version, data] = log.split('EVENT_JSON:');
+    static fromLog = (log: string): Event => {
+        return { relatedReceiptId: '', rawEvent: RawEvent.fromLog(log) } as Event;
+    }
+}
 
-    return {
-        event,
-        standard,
-        version,
-        data: data ? JSON.parse(data) : undefined
+export class RawEvent {
+    readonly event: string
+    readonly standard: string
+    readonly version: string
+    readonly data: JSON | undefined
+
+    constructor(event: string, standard: string, version: string, data: JSON | undefined) {
+        this.event = event;
+        this.standard = standard;
+        this.version = version;
+        this.data = data;
+    }
+
+    static fromLog = (log: string): RawEvent | undefined => {
+        if (!log.startsWith('EVENT_JSON:')) {
+            return
+        }
+
+        const [event, standard, version, data] = log.split('EVENT_JSON:');
+
+        return {
+            event,
+            standard,
+            version,
+            data: data ? JSON.parse(data) : undefined
+        };
     };
 };
 
 export type Events = {
     events: Event[];
 }
-
-export const logToEvent = (log: string): Event => {
-    return { relatedReceiptId: '', rawEvent: logToRawEvent(log) } as Event;
-};

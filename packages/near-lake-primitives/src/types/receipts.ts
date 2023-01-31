@@ -1,7 +1,6 @@
 
 import { ExecutionOutcomeWithReceipt, ExecutionStatus, ReceiptView, ActionReceipt } from './core/types';
-import { Events, logToEvent } from './events';
-import { Event } from './events';
+import { Events, Event } from './events';
 
 export class Receipt implements Events {
   readonly receiptKind: ReceiptKind;
@@ -23,7 +22,7 @@ export class Receipt implements Events {
   }
 
   get events(): Event[] {
-    return this.logs.map(logToEvent);
+    return this.logs.map(Event.fromLog);
   }
 
   static fromOutcomeWithReceipt = (outcomeWithReceipt: ExecutionOutcomeWithReceipt): Receipt => {
