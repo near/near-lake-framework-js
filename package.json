@@ -5,7 +5,8 @@
   "private": true,
   "license": "(MIT OR Apache-2.0)",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "repository": {
     "type": "git",
@@ -14,8 +15,10 @@
   "homepage": "https://near-indexers.io",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev"
-   },
+    "clean": "turbo run clean",
+    "dev": "turbo run dev",
+    "demo": "turbo run demo --filter=@near-lake/$npm_config_name"
+  },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.6",
     "@changesets/cli": "^2.24.4",

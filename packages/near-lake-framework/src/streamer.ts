@@ -1,6 +1,7 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { listBlocks, fetchStreamerMessage } from './s3fetchers';
-import { LakeConfig, StreamerMessage } from './types';
+import { LakeConfig } from './types';
+import { Block, StreamerMessage, LakeContext } from "@near-lake/indexer-primitives"
 import { sleep } from './utils';
 
 const FATAL_ERRORS = ['CredentialsProviderError'];
@@ -104,8 +105,9 @@ export async function* stream(
 
 export async function startStream(
     config: LakeConfig,
-    onStreamerMessageReceived: (data: StreamerMessage) => Promise<void>
+    onStreamerMessageReceived: (data: Block, context: LakeContext) => Promise<void>
 ) {
+    let context = new LakeContext();
     const queue: Promise<void>[] = [];
     for await (const streamerMessage of stream(config)) {
         // `queue` here is used to achieve throttling as streamer would run ahead without a stop
@@ -113,7 +115,8 @@ export async function startStream(
         // This implementation has a pipeline that fetches the data from S3 while `onStreamerMessageReceived`
         // is being processed, so even with a queue size of 1 there is already a benefit.
         // TODO: Reliable error propagation for onStreamerMessageReceived?
-        queue.push(onStreamerMessageReceived(streamerMessage));
+        let block = Block.fromStreamerMessage(streamerMessage)
+        queue.push(onStreamerMessageReceived(block, context));
         if (queue.length > 10) {
             await queue.shift();
         }

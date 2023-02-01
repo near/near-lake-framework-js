@@ -6,8 +6,17 @@
       "inputs": ["src/**/*.tsx", "src/**/*.ts"],
       "outputs": ["dist/**"]
     },
+    "clean": {
+      "inputs": [],
+      "cache": false
+    },
     "dev": {
       "cache": false,
+      "persistent": true
+    },
+    "demo": {
+      "inputs": ["src/**/*.tsx", "src/**/*.ts"],
+      "outputs": ["dist/**"],
       "persistent": true
     }
   }

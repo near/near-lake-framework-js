@@ -155,3 +155,13 @@ We use Milestones with clearly defined acceptance criteria:
 
 - [x] [MVP](https://github.com/near/near-lake-framework/milestone/1)
 - [ ] [1.0](https://github.com/near/near-lake-framework/milestone/2)
+
+## Running examples
+
+Inside `apps/` we have created a created a bunch of example implementations for using the indexer. 
+
+To test out any of the indexers, from the root, run:
+
+```bash
+$ npm run demo --name=<example_package_name>
+```
