@@ -5,22 +5,14 @@ import { Event, RawEvent } from './events';
 import { StateChange } from './stateChanges';
 
 export class Block {
-    private _actions: Map<string, Action>;
-    private _events: Map<string, Event[]>;
-    private _stateChanges: StateChange[];
-
     constructor(
         readonly streamerMessage: StreamerMessage,
         private executedReceipts: Receipt[],
         readonly postponedReceipts: Receipt[],
         readonly transactions: Transaction[],
-        actions: Map<string, Action>,
-        events: Map<string, Event[]>,
-        stateChanges: StateChange[]) {
-        this._actions = actions;
-        this._events = events;
-        this._stateChanges = stateChanges;
-    }
+        private _actions: Map<string, Action>,
+        private _events: Map<string, Event[]>,
+        private _stateChanges: StateChange[]) { }
 
     get blockHash(): string {
         return this.header().hash;
@@ -51,20 +43,16 @@ export class Block {
             .flatMap((shard) => shard.receiptExecutionOutcomes)
             .filter((exeuctionOutcomeWithReceipt) => Action.isActionReceipt(exeuctionOutcomeWithReceipt.receipt))
             .map((exeuctionOutcomeWithReceipt) => Action.fromReceiptView(exeuctionOutcomeWithReceipt.receipt))
-            .filter((action) => action !== null)
-            .map(action => action as Action)
+            .filter((action): action is Action => action !== null)
+            .map(action => action)
         return actions
     }
 
     events(): Event[] {
-        const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.map(RawEvent.fromLog).map((rawEvent) => {
-            if (rawEvent) {
-                let event: Event = { relatedReceiptId: executedReceipt.receiptId, rawEvent: rawEvent }
-                return event
-            } else {
-                return null
-            }
-        })).filter((event: Event | null): event is Event => event !== null)
+        const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.filter(RawEvent.isEvent).map(RawEvent.fromLog).map((rawEvent) => {
+            let event: Event = { relatedReceiptId: executedReceipt.receiptId, rawEvent: rawEvent }
+            return event
+        }))
         return events
     }
 
@@ -94,10 +82,7 @@ export class Block {
     eventsByAccountId(account_id: string): Event[] {
         return this.events().filter((event) => {
             const action = this.actionByReceiptId(event.relatedReceiptId)
-            if (action !== undefined && action?.receiverId == account_id || action?.signerId == account_id) {
-                return true
-            }
-            return false
+            return action?.receiverId == account_id || action?.signerId == account_id
         });
     }
 
@@ -124,13 +109,25 @@ export class Block {
         return block;
     }
 
-
 }
 
 
 export class BlockHeader {
 
-    constructor(readonly height: number, readonly hash: string, readonly prevHash: string, readonly author: string, readonly timestampNanosec: string, readonly epochId: string, readonly nextEpochId: string, readonly gasPrice: string, readonly totalSupply: string, readonly latestProtocolVersion: number, readonly randomValue: string, readonly chunksIncluded: number, readonly validatorProposals: ValidatorStakeView[]) { }
+    constructor(
+        readonly height: number,
+        readonly hash: string,
+        readonly prevHash: string,
+        readonly author: string,
+        readonly timestampNanosec: string,
+        readonly epochId: string,
+        readonly nextEpochId: string,
+        readonly gasPrice: string,
+        readonly totalSupply: string,
+        readonly latestProtocolVersion: number,
+        readonly randomValue: string,
+        readonly chunksIncluded: number,
+        readonly validatorProposals: ValidatorStakeView[]) { }
 
     static fromStreamerMessage(streamerMessage: StreamerMessage): BlockHeader {
         return new BlockHeader(

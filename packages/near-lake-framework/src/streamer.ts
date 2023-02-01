@@ -107,7 +107,7 @@ export async function startStream(
     config: LakeConfig,
     onStreamerMessageReceived: (data: Block, context: LakeContext) => Promise<void>
 ) {
-    let context = new LakeContext()
+    let context = new LakeContext();
     const queue: Promise<void>[] = [];
     for await (const streamerMessage of stream(config)) {
         // `queue` here is used to achieve throttling as streamer would run ahead without a stop
