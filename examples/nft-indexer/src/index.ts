@@ -1,5 +1,5 @@
 
-import { startStream, types } from 'near-lake-framework';
+import { startStream, types } from '@near-lake/framework';
 
 const lakeConfig: types.LakeConfig = {
     s3BucketName: 'near-lake-data-mainnet',

@@ -22,7 +22,7 @@
     "demo": "tsc && node dist/index.js"
   },
   "dependencies": {
-    "near-lake-framework": "file:../../packages/near-lake-framework"
+    "@near-lake/framework": "file:../../packages/near-lake-framework"
   },
   "devDependencies": {}
 }
