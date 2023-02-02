@@ -1,7 +1,10 @@
 {
-  "name": "@near-lake/indexer-primitives",
+  "name": "@near-lake/lake-primitives",
   "version": "1.0.0",
-  "keywords": ["indexer-primitives", "near-indexer"],
+  "keywords": [
+    "lake-primitives",
+    "near-indexer"
+  ],
   "author": "NEAR Inc <hello@nearprotocol.com>",
   "description": "Near Protocol primitive datatypes utilized by near-lake-framework",
   "main": "dist/index.js",
