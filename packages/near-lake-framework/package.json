@@ -21,7 +21,6 @@
     "/dist"
   ],
   "scripts": {
-    "prepare": "npm run build",
     "build": "tsc",
     "clean": "rm -rf ./dist",
     "dev": "tsc -w"
