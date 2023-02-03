@@ -1,6 +1,6 @@
 {
   "name": "@near-lake/primitives",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "keywords": [
     "lake-primitives",
     "near-indexer"
@@ -13,7 +13,6 @@
     "/dist"
   ],
   "scripts": {
-    "prepare": "npm run build",
     "build": "tsc",
     "clean": "rm -rf ./dist",
     "dev": "tsc -w"

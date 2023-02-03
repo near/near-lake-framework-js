@@ -12,7 +12,7 @@ import {
     BlockView,
     Shard,
     StreamerMessage,
-} from '@near-lake/indexer-primitives';
+} from '@near-lake/primitives';
 import { normalizeBlockHeight, parseBody } from './utils';
 
 // Queries the list of the objects in the bucket, grouped by "/" delimiter.
