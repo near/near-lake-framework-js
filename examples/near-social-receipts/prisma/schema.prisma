@@ -1,0 +1,23 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model receipts {
+  id        Int      @default(autoincrement()) @id
+  receipt_id String 
+  signer_id String
+  block_height  Int
+  outcome_index Int
+  account_id String 
+  method_name String
+  status  String
+  args String
+}
