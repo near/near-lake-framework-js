@@ -24,19 +24,7 @@ async function handleStreamerMessage(
     ctx: types.LakeContext,
 ): Promise<void> {
     const nearSocialReceipts = block.receipts().filter(receipt => receipt.receiverId === SOCIAL_DB)
-    // .flatMap(action =>
-    //     action
-    //         .operations
-    //         .map(operation => operation['FunctionCall'])
-    //         .filter(operation => operation?.methodName === 'set')
-    //         .map(functionCallOperation => ({
-    //             ...functionCallOperation,
-    //             args: base64decode(functionCallOperation.args)
-    //         }))
-    //         .filter(functionCall =>
-    //             'post' in functionCall.args.data[action.predecessorId]
-    //         )
-    // );
+
     if (nearSocialReceipts.length > 0) {
         const blockHeight = block.blockHeight;
         console.log(blockHeight);
