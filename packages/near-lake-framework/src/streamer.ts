@@ -108,7 +108,7 @@ export async function startStream(
     onStreamerMessageReceived: (data: Block, context: LakeContext) => Promise<void>
 ) {
     let context = new LakeContext();
-    const queue: Promise<void>[] = [];
+    const queue: (() => Promise<void>)[] = [];
     for await (const streamerMessage of stream(config)) {
         // `queue` here is used to achieve throttling as streamer would run ahead without a stop
         // and if we start from genesis it will spawn millions of `onStreamerMessageReceived` callbacks.
@@ -116,9 +116,10 @@ export async function startStream(
         // is being processed, so even with a queue size of 1 there is already a benefit.
         // TODO: Reliable error propagation for onStreamerMessageReceived?
         let block = Block.fromStreamerMessage(streamerMessage)
-        queue.push(onStreamerMessageReceived(block, context));
+        queue.push(() => onStreamerMessageReceived(block, context));
         if (queue.length > 10) {
-            await queue.shift();
+            const handler = queue.shift();
+            await handler();
         }
     }
 }
