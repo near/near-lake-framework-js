@@ -189,7 +189,22 @@ export type DeleteAccountAction = {
   };
 };
 
-export type Action =
+export type DelegateAction = {
+  Delegate: {
+    delegateAction: {
+      senderId: string;
+      receiverId: string;
+      actions: NonDelegateAction[];
+      nonce: number;
+      maxBlockHeight: number;
+      publicKey: string;
+    }
+  };
+  signature: string;
+};
+
+// Delegate actions can not contain other delegate actions
+export type NonDelegateAction = 
   | "CreateAccount"
   | DeployContractAction
   | FunctionCallAction
@@ -198,6 +213,17 @@ export type Action =
   | AddKeyAction
   | DeleteKeyAction
   | DeleteAccountAction;
+
+export type Action =
+  | "CreateAccount"
+  | DeployContractAction
+  | FunctionCallAction
+  | TransferAction
+  | StakeAction
+  | AddKeyAction
+  | DeleteKeyAction
+  | DeleteAccountAction
+  | DelegateAction;
 
 export interface AccessKey {
   nonce: number;
