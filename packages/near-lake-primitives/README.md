@@ -6,7 +6,7 @@ This crate contains the primitive types used by the [NEAR Lake Framework package
 
 ### `Block`
 
-#### Structure Definition
+#### `Block` Structure Definition
 
 The `Block` type is used to represent a block in the NEAR Lake Framework. It is comprised by the following structure:
 
@@ -60,7 +60,7 @@ This field is an internal field that serves `Block.eventsByReceiptId()` method (
 
 This field holds all the `StateChanges` happened in this block.
 
-#### Helper Methods
+#### `Block` Helper Methods
 
 ```ts
 export class Block {
@@ -141,4 +141,107 @@ Returns an Array of Events emitted by `ExecutionOutcome` for the given `account_
 ### Important Notes on `Block`
 
 - All the entities located on different shards were merged into one single list without differentiation.
-- `Block` is not the fairest name for this structure either. NEAR Protocol is a sharded blockchain, so its block is actually an ephemeral structure that represents a collection of real blocks called chunks in NEAR Protocol. 
+- `Block` is not the fairest name for this structure either. NEAR Protocol is a sharded blockchain, so its block is actually an ephemeral structure that represents a collection of real blocks called chunks in NEAR Protocol.
+
+### `BlockHeader`
+
+Replacement for `BlockHeaderView` from `near-primitives`. Shrunken and simplified. Note: the original `BlockHeaderView` is still accessible via the `.streamerMessage` attribute.
+
+#### `BlockHeader` Structure Definition
+
+```ts
+export class BlockHeader {
+    constructor(
+        readonly height: number,
+        readonly hash: string,
+        readonly prevHash: string,
+        readonly author: string,
+        readonly timestampNanosec: string,
+        readonly epochId: string,
+        readonly nextEpochId: string,
+        readonly gasPrice: string,
+        readonly totalSupply: string,
+        readonly latestProtocolVersion: number,
+        readonly randomValue: string,
+        readonly chunksIncluded: number,
+        readonly validatorProposals: ValidatorStakeView[]) { 
+        }
+    ... // helper method ommitted for brevity
+}
+```
+
+### `Receipt`
+
+This field is a simplified representation of the `ReceiptView` structure from `near-primitives`.
+
+#### `Receipt` Structure Definition
+
+```ts
+export class Receipt implements Events {
+  constructor(
+    readonly receiptKind: ReceiptKind, 
+    readonly receiptId: string, 
+    readonly receiverId: string, 
+    readonly predecessorId: string, 
+    readonly status: ExecutionStatus, 
+    readonly executionOutcomeId?: string | undefined, 
+    readonly logs: string[] = []) {
+    }
+  ... // helper methods ommitted for brevity
+}
+```
+
+#### `Receipt` Fields
+
+##### `receiptKind`
+
+Defined the type of the `Receipt`: `Action` or `Data` representing the `ActionReceipt` and `DataReceipt`.
+
+##### `receiptId`
+
+The ID of the `Receipt` of the `CryptoHash` type.
+
+##### `receiverId`
+
+The receiver account id of the `Receipt`.
+
+##### `predecessorId`
+
+The predecessor account id of the `Receipt`.
+
+##### `status`
+
+Represents the status of `ExecutionOutcome` of the `Receipt`.
+
+See the `ExecutionStatus` enum section for the details.
+
+##### `executionOutcomeId`
+
+The id of the `ExecutionOutcome` for the `Receipt`. Returns `null` if the `Receipt` isn’t executed yet and has a postponed status.
+
+##### `logs`
+
+The original logs of the corresponding `ExecutionOutcome` of the `Receipt`.
+
+Note: not all of the logs might be parsed as JSON Events (`Events`).
+
+#### `Receipt` Helper Methods
+
+```ts
+export class Receipt {
+    ... // constructor ommitted for brevity
+    get events(): Event[] {}
+
+    static fromOutcomeWithReceipt(outcomeWithReceipt: OutcomeWithReceipt): Receipt {}
+}
+```
+
+##### `Receipt.events()`
+
+Returns an Array of `Events` for the `Receipt`, if any. This might be empty if the `logs` field is empty or doesn’t contain JSON Events compatible log records.
+
+### `Event`
+
+### `StateChange`
+
+### `Transaction`
