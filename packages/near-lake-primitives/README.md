@@ -267,3 +267,90 @@ export class Event {
 
 ### `Transaction`
 
+A representation of the `IndexerTransactionWithOutcome` from `near-indexer-primitives` which is an ephemeral structure combining `SignedTransactionView` from `near-primitives` and `IndexerExecutionOutcomeWithOptionalReceipt` from `near-indexer-primitives`.
+
+This structure is very similar to `Receipt`. Unlike `Receipt`, a `Transaction` has a few additional fields like `signerId`, `signature`, and `operations`.
+
+#### `Transaction` Structure Definition
+
+```ts
+export class Transaction {
+    constructor(
+      readonly transactionHash: string, 
+      readonly signerId: string, 
+      readonly signerPublicKey: string, 
+      readonly signature: string, 
+      readonly receiverId: string, 
+      readonly status: ExecutionStatus, 
+      readonly executionOutcomeId: string, 
+      readonly operations: Operation[]) { 
+      }
+}
+```
+
+##### `Transaction.transactionHash`
+
+Returns the hash of the `Transaction` in `CryptoHash`.
+
+##### `Transaction.signerId`
+
+Returns the signer account id of the `Transaction`.
+
+##### `Transaction.signerPublicKey`
+
+Returns the `PublicKey` of the signer of the `Transaction`.
+
+##### `Transaction.signature`
+
+Returns the `Signature` the `Transaction` was signed with.
+
+##### `Transaction.receiverId`
+
+Returns the receiver account id of the `Transaction`.
+
+##### `Transaction.status`
+
+Returns the status of the `Transaction` as `ExecutionStatus`.
+
+##### `Transaction.executionOutcomeId`
+
+Returns the id of the `ExecutionOutcome` for the `Transaction`.
+
+##### `Transaction.operations`
+
+Returns an Array of `Operation` for the `Transaction`.
+
+### `StateChange`
+
+This structure is almost an identical copy of the `StateChangeWithCauseView` from `near-primitives` with a propagated additional field `affectedAccountId`.
+
+#### `StateChange` Structure Definition
+
+```ts
+export class StateChange {
+    constructor(
+      readonly cause: StateChangeCause, 
+      readonly value: StateChangeValue
+    ) {}
+    
+    get affectedAccountId(): string {}
+
+    static fromStateChangeView(stateChangeView: StateChangeWithCauseView) {}
+}
+```
+
+##### `StateChange.cause`
+
+Returns the `cause` of the `StateChange`.
+
+##### `StateChange.value`
+
+Returns the `value` of the `StateChange`.
+
+##### `StateChange.affectedAccountId()`
+
+Returns the account id of the `StateChange`.
+
+##### `StateChange.fromStateChangeView()`
+
+Returns the `StateChange` from the `StateChangeWithCauseView`. Created for backward compatibility.
