@@ -2,6 +2,8 @@
 
 NEAR Lake Framework is a syntactical framework for accessing the NEAR Lake Indexer Data. It is a wrapper around the AWS API.
 
+Has `@near-lake/primitives` as a dependency, which contains the types for the data with associated helper functions.
+
 ## Simple Example
 
 ```ts
@@ -32,3 +34,4 @@ The interface to capture data about an event has the following arguments:
 - `version`: e.g. 1.0.0
 - `event`: type of the event, e.g. nft_mint
 - `data`: associate event data. Strictly typed for each set {standard, version, event} inside corresponding NEP
+
