@@ -242,6 +242,28 @@ Returns an Array of `Events` for the `Receipt`, if any. This might be empty if t
 
 ### `Event`
 
-### `StateChange`
+This structure is an ephemeral entity to provide access to the Events Standard structure and keep a data about the related `Receipt` for convenience.
+
+#### `Event` Structure Definition
+
+```ts
+export class Event {
+    constructor(
+      readonly relatedReceiptId: string, 
+      readonly rawEvent: RawEvent) {
+      }
+    ... // helper methods ommitted for brevity
+}
+```
+
+#### `Event` Methods
+
+```ts
+export class Event {
+    ... // constructor ommitted for brevity
+    static fromLog(log: string): Event {}
+}
+```
 
 ### `Transaction`
+
