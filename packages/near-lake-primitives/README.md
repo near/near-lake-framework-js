@@ -40,22 +40,6 @@ List of included `Transactions`, converted into `Receipts`.
 
 **_NOTE_:** Heads up! You might want to know about `Transactions` to know where the action chain has begun. In other cases you might want to know where the main asset is, like Ethereum where a transaction is a main asset. On NEAR, `Receipts` are more important.
 
-##### `actions`
-
-A cache field for the executed `Actions` of this particular block. It is a map to get the `Action` structure for a specific `Receipt` by its ID.
-
-This field is an internal field that serves the `Block.actionByReceiptId()` method (see the corresponding section of this doc).
-
-##### `events`
-
-A cache field for the parsed JSON Events from the `ExecutionOutcome` logs, similar to the `actions` field described above.
-
-This field is an internal field that serves `Block.eventsByReceiptId()` method (see the corresponding section of this doc).
-
-##### `stateChanges`
-
-This field holds all the `StateChanges` happened in this block.
-
 #### `Block` Helper Methods
 
 ```ts
