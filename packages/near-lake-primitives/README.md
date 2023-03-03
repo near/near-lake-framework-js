@@ -30,10 +30,6 @@ export class Block {
 
 Low-level structure for backward compatibility. As implemented in previous versions of [`near-lake-framework`](https://www.npmjs.com/package/near-lake-framework). 
 
-##### `executedReceipts`
-
-This field is a representation of streamerMessage.shard[N].receiptExecutionOutcomes. `receiptExecutionOutcomes` has a type `IndexerExecutionOutcomesWithReceipt` which is an ephemeral structure from `near-indexer-primitives` that holds an `ExecutionOutcomeView` along with the corresponding `ReceiptView`.
-
 ##### `postponedReceipts`
 
 Receipts included on the chain but not executed yet marked as “postponed”: they are represented by the same structure `Receipt` (see the corresponding section in this doc for more details).
