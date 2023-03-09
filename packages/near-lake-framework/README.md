@@ -19,6 +19,7 @@ async function handleStreamerMessage(
     block: types.Block,
     context: types.LakeContext
 ): Promise<void> {
+    // custom logic for handling the block
     let events = block.eventsByAccountId("x.paras.near")
     console.log(events)
 }
