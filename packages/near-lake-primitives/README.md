@@ -38,7 +38,7 @@ Receipts included on the chain but not executed yet marked as “postponed”: t
 
 List of included `Transactions`, converted into `Receipts`.
 
-**_NOTE_:** Heads up! You might want to know about `Transactions` to know where the action chain has begun. In other cases you might want to know where the main asset is, like Ethereum where a transaction is a main asset. On NEAR, `Receipts` are more important.
+**_NOTE_:** Heads up! You might want to know about `Transactions` to know where the action chain has begun. Unlike Ethereum, where a Transaction contains everything you may want to know about a particular interaction on  the Ethereum blockchain, Near Protocol because of its asynchronous nature converts a `Transaction` into a `receipt` before executing it. Thus, On NEAR, `Receipts` are more important for figuring out what happened on-chain as a result of a Transaction signed by a user. 
 
 #### `Block` Helper Methods
 
@@ -222,7 +222,7 @@ Returns an Array of `Events` for the `Receipt`, if any. This might be empty if t
 
 ### `Event`
 
-This structure is an ephemeral entity to provide access to the Events Standard structure and keep a data about the related `Receipt` for convenience.
+This structure is an ephemeral entity to provide access to the [Events Standard](https://github.com/near/NEPs/blob/master/neps/nep-0297.md) structure and keep data about the related `Receipt` for convenience.
 
 #### `Event` Structure Definition
 
