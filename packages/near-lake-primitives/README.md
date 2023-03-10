@@ -244,6 +244,15 @@ Returns an Array of `Events` for the `Receipt`, if any. This might be empty if t
 
 This structure is an ephemeral entity to provide access to the Events Standard structure and keep a data about the related `Receipt` for convenience.
 
+#### Interface for Capturing Data About an Event in `handleStreamerMessage()`
+
+The interface to capture data about an event has the following arguments:
+
+- `standard`: name of standard, e.g. nep171
+- `version`: e.g. 1.0.0
+- `event`: type of the event, e.g. nft_mint
+- `data`: associate event data. Strictly typed for each set {standard, version, event} inside corresponding NEP
+
 #### `Event` Structure Definition
 
 ```ts
