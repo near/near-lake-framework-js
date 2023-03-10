@@ -29,10 +29,3 @@ async function handleStreamerMessage(
 })();
 ```
 The main function in this example is handleStreamerMessage(block, context), which contains custom logic for how to handle a given block. `block` is of type Block from @near-lake/primitives which gives access to helper methods to make it easier to extract data. You may find a list of helper functions [here](https://www.npmjs.com/package/@near-lake/primitives). 
-The interface to capture data about an event has the following arguments:
-
-- `standard`: name of standard, e.g. nep171
-- `version`: e.g. 1.0.0
-- `event`: type of the event, e.g. nft_mint
-- `data`: associate event data. Strictly typed for each set {standard, version, event} inside corresponding NEP
-
