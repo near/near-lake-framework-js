@@ -15,7 +15,7 @@ const lakeConfig: types.LakeConfig = {
     startBlockHeight: 66264389,
 };
 
-async function handleStreamerMessage(
+async function handleBlock(
     block: types.Block,
     context: types.LakeContext
 ): Promise<void> {
