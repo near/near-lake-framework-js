@@ -78,27 +78,27 @@ Returns the previous block hash. A shortcut to get the data from the block heade
 
 Returns the block height. A shortcut to get the data from the block header.
 
-##### `header()`
+##### `header(): BlockHeader`
 
 Returns a `BlockHeader` structure of the block
 
 See `BlockHeader` structure sections for details.
 
-##### `receipts()`
+##### `receipts(): Receipt[]`
 
 Returns a slice of `Receipts` executed in the block.
 
 Basically is a getter for the `executedReceipts` field.
 
-##### `actions()`
+##### `actions(): Action[]`
 
 Returns an Array of `Actions` executed in the block.
 
-##### `events()`
+##### `events(): Event[]`
 
 Returns `Events` emitted in the block.
 
-##### `stateChanges()`
+##### `stateChanges(): StateChange[]`
 
 Returns an Array of `StateChange` occurred in the block.
 
