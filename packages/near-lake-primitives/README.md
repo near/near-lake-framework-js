@@ -340,6 +340,6 @@ Returns the `value` of the `StateChange`.
 
 Returns the account id of the `StateChange`.
 
-##### `StateChange.fromStateChangeView()`
+##### `StateChange.fromStateChangeView(stateChangeView: StateChangeWithCauseView): StateChange`
 
 Returns the `StateChange` from the `StateChangeWithCauseView`. Created for backward compatibility.
