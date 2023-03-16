@@ -216,7 +216,7 @@ export class Receipt {
 }
 ```
 
-##### `Receipt.events()`
+##### `Receipt.events(): Events[]`
 
 Returns an Array of `Events` for the `Receipt`, if any. This might be empty if the `logs` field is empty or doesn’t contain JSON Events compatible log records.
 
@@ -336,7 +336,7 @@ Returns the `cause` of the `StateChange`.
 
 Returns the `value` of the `StateChange`.
 
-##### `StateChange.affectedAccountId()`
+##### `StateChange.affectedAccountId(): string`
 
 Returns the account id of the `StateChange`.
 
