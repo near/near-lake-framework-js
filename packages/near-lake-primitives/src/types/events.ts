@@ -1,4 +1,9 @@
 
+export type Log = {
+    log: String;
+    relatedReceiptId: String;
+}
+
 export class Event {
     constructor(readonly relatedReceiptId: string, readonly rawEvent: RawEvent) { }
 
