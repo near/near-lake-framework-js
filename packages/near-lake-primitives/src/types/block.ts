@@ -1,7 +1,7 @@
 import { Action, Receipt } from './receipts';
 import { StreamerMessage, ValidatorStakeView } from './core/types';
 import { Transaction } from './transactions';
-import { Event, RawEvent } from './events';
+import { Event, RawEvent, Log } from './events';
 import { StateChange } from './stateChanges';
 
 export class Block {
@@ -54,6 +54,14 @@ export class Block {
             return event
         }))
         return events
+    }
+
+    logs(): Log[] {
+        const logs: Log[] = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.map((rawLog) => {
+            let log: Log = { relatedReceiptId: executedReceipt.receiptId, log: rawLog }
+            return log
+        }))
+        return logs
     }
 
     stateChanges(): StateChange[] {
