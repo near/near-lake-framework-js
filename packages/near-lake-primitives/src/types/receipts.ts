@@ -2,9 +2,51 @@
 import { ExecutionOutcomeWithReceipt, ExecutionStatus, ReceiptView, ActionReceipt } from './core/types';
 import { Events, Event } from './events';
 
+/**
+ * This field is a simplified representation of the `ReceiptView` structure from `near-primitives`.
+ */
 export class Receipt implements Events {
-  constructor(readonly receiptKind: ReceiptKind, readonly receiptId: string, readonly receiverId: string, readonly predecessorId: string, readonly status: ExecutionStatus, readonly executionOutcomeId?: string | undefined, readonly logs: string[] = []) { }
+  constructor(
+    /**
+     * Defined the type of the `Receipt`: `Action` or `Data` representing the `ActionReceipt` and `DataReceipt`.
+     */
+    readonly receiptKind: ReceiptKind, 
 
+    /**
+     * The ID of the `Receipt` of the `CryptoHash` type.
+     */
+    readonly receiptId: string, 
+
+    /**
+     * The receiver account id of the `Receipt`.
+     */
+    readonly receiverId: string, 
+
+    /**
+     * The predecessor account id of the `Receipt`.
+     */
+    readonly predecessorId: string, 
+
+    /**
+     * Represents the status of `ExecutionOutcome` of the `Receipt`.
+     */
+    readonly status: ExecutionStatus, 
+
+    /**
+     * The id of the `ExecutionOutcome` for the `Receipt`. Returns `null` if the `Receipt` isn’t executed yet and has a postponed status.
+     */
+    readonly executionOutcomeId?: string | undefined, 
+
+    /**
+     * The original logs of the corresponding `ExecutionOutcome` of the `Receipt`.
+     *
+     * **Note:** not all of the logs might be parsed as JSON Events (`Events`).
+     */
+    readonly logs: string[] = []) { }
+
+  /**
+   * Returns an Array of `Events` for the `Receipt`, if any. This might be empty if the `logs` field is empty or doesn’t contain JSON Events compatible log records.
+   */
   get events(): Event[] {
     return this.logs.map(Event.fromLog).filter((e): e is Event => e !== undefined);
   }

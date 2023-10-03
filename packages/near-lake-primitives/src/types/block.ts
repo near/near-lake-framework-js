@@ -4,31 +4,69 @@ import { Transaction } from './transactions';
 import { Event, RawEvent, Log } from './events';
 import { StateChange } from './stateChanges';
 
+/**
+ * The `Block` type is used to represent a block in the NEAR Lake Framework.
+ *
+ * **Important Notes on `Block`:**
+ * - All the entities located on different shards were merged into one single list without differentiation.
+ * - `Block` is not the fairest name for this structure either. NEAR Protocol is a sharded blockchain, so its block is actually an ephemeral structure that represents a collection of real blocks called chunks in NEAR Protocol.
+ */
 export class Block {
     constructor(
+        /**
+         * Low-level structure for backward compatibility.
+         * As implemented in previous versions of [`near-lake-framework`](https://www.npmjs.com/package/near-lake-framework).
+         */
         readonly streamerMessage: StreamerMessage,
         private executedReceipts: Receipt[],
+        /**
+         * Receipts included on the chain but not executed yet marked as “postponed”: they are represented by the same structure `Receipt` (see the corresponding section in this doc for more details).
+         */
         readonly postponedReceipts: Receipt[],
+        /**
+         * List of included `Transactions`, converted into `Receipts`.
+         *
+         * **_NOTE_:** Heads up! You might want to know about `Transactions` to know where the action chain has begun. Unlike Ethereum, where a Transaction contains everything you may want to know about a particular interaction on  the Ethereum blockchain, Near Protocol because of its asynchronous nature converts a `Transaction` into a `Receipt` before executing it. Thus, On NEAR, `Receipts` are more important for figuring out what happened on-chain as a result of a Transaction signed by a user. Read more about [Transactions on Near](https://nomicon.io/RuntimeSpec/Transactions) here.
+         *
+         */
         readonly transactions: Transaction[],
         private _actions: Map<string, Action>,
         private _events: Map<string, Event[]>,
         private _stateChanges: StateChange[]) { }
 
+    /**
+     * Returns the block hash. A shortcut to get the data from the block header.
+     */
     get blockHash(): string {
         return this.header().hash;
     }
 
+    /**
+     * Returns the previous block hash. A shortcut to get the data from the block header.
+     */
     get prevBlockHash(): string {
         return this.header().prevHash;
     }
+
+    /**
+     * Returns the block height. A shortcut to get the data from the block header.
+     */
     get blockHeight(): number {
         return this.header().height;
     }
 
+    /**
+     * Returns a `BlockHeader` structure of the block
+     * See `BlockHeader` structure sections for details.
+     */
     header(): BlockHeader {
         return BlockHeader.fromStreamerMessage(this.streamerMessage);
     }
 
+    /**
+     * Returns a slice of `Receipts` executed in the block.
+     * Basically is a getter for the `executedReceipts` field.
+     */
     receipts(): Receipt[] {
         if (this.executedReceipts.length == 0) {
             this.executedReceipts = this.streamerMessage.shards
@@ -38,6 +76,9 @@ export class Block {
         return this.executedReceipts;
     }
 
+    /**
+     * Returns an Array of `Actions` executed in the block.
+     */
     actions(): Action[] {
         const actions: Action[] = this.streamerMessage.shards
             .flatMap((shard) => shard.receiptExecutionOutcomes)
@@ -48,6 +89,9 @@ export class Block {
         return actions
     }
 
+    /**
+     * Returns `Events` emitted in the block.
+     */
     events(): Event[] {
         const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.filter(RawEvent.isEvent).map(RawEvent.fromLog).map((rawEvent) => {
             let event: Event = { relatedReceiptId: executedReceipt.receiptId, rawEvent: rawEvent }
@@ -64,6 +108,9 @@ export class Block {
         return logs
     }
 
+    /**
+     * Returns an Array of `StateChange` occurred in the block.
+     */
     stateChanges(): StateChange[] {
         if (this._stateChanges.length == 0) {
             this._stateChanges = this.streamerMessage.shards
@@ -73,6 +120,13 @@ export class Block {
         return this._stateChanges
     }
 
+    /**
+     * Returns `Action`s of the provided `receipt_id` from the block if any. Returns `undefined` if there is no corresponding `Action`.
+     *
+     * This method uses the internal `Block` `action` field which is empty by default and will be filled with the block’s actions on the first call to optimize memory usage.
+     *
+     * The result is either `Action | undefined` since there might be a request for an `Action` by `receipt_id` from another block, in which case this method will be unable to find the `Action` in the current block. In the other case, the request might be for an `Action` for a `receipt_id` that belongs to a `DataReceipt` where an action does not exist.
+     */
     actionByReceiptId(receipt_id: string): Action | undefined {
         if (this._actions.size == 0) {
             this.buildActionsHashmap()
@@ -80,6 +134,9 @@ export class Block {
         return this._actions.get(receipt_id);
     }
 
+    /**
+     * Returns an Array of Events emitted by `ExecutionOutcome` for the given `receipt_id`. There might be more than one `Event` for the `Receipt` or there might be none of them. In the latter case, this method returns an empty Array.
+     */
     eventsByReceiptId(receipt_id: string): Event[] {
         if (this._events.size == 0) {
             this.buildEventsHashmap()
@@ -87,6 +144,9 @@ export class Block {
         return this._events.get(receipt_id) || [];
     }
 
+    /**
+     * Returns an Array of Events emitted by `ExecutionOutcome` for the given `account_id`. There might be more than one `Event` for the `Receipt` or there might be none of them. In the latter case, this method returns an empty Array.
+     */
     eventsByAccountId(account_id: string): Event[] {
         return this.events().filter((event) => {
             const action = this.actionByReceiptId(event.relatedReceiptId)
@@ -120,6 +180,11 @@ export class Block {
 }
 
 
+/**
+ * Replacement for `BlockHeaderView` from `near-primitives`. Shrunken and simplified. 
+ *
+ * **Note:** the original `BlockHeaderView` is still accessible via the `.streamerMessage` attribute.
+ */
 export class BlockHeader {
 
     constructor(
@@ -155,7 +220,3 @@ export class BlockHeader {
         );
     }
 }
-
-
-
-
