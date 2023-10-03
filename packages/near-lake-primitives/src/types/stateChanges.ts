@@ -1,14 +1,32 @@
 import { StateChangeWithCauseView } from './core/types';
 import { AccessKey } from './receipts';
 
+/**
+ * This structure is almost an identical copy of the `StateChangeWithCauseView` from `near-primitives` with a propagated additional field `affectedAccountId`.
+ */
 export class StateChange {
 
-    constructor(readonly cause: StateChangeCause, readonly value: StateChangeValue) {}
+    constructor(
+        /**
+         * Returns the `cause` of the `StateChange`.
+         */
+        readonly cause: StateChangeCause, 
 
+        /**
+         * Returns the `value` of the `StateChange`.
+         */
+        readonly value: StateChangeValue) {}
+
+    /**
+     * Returns the account id of the `StateChange`.
+     */
     get affectedAccountId(): string {
         return this.value.accountId;
     }
 
+    /**
+     * Returns the `StateChange` from the `StateChangeWithCauseView`. Created for backward compatibility.
+     */
     static fromStateChangeView(stateChangeView: StateChangeWithCauseView) {
         let { cause, value } = stateChangeView;
         return new StateChange(cause, value)
