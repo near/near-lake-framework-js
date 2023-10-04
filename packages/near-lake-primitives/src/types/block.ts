@@ -121,7 +121,7 @@ export class Block {
     }
 
     /**
-     * Returns `Action`s of the provided `receipt_id` from the block if any. Returns `undefined` if there is no corresponding `Action`.
+     * Returns `Action` of the provided `receipt_id` from the block if any. Returns `undefined` if there is no corresponding `Action`.
      *
      * This method uses the internal `Block` `action` field which is empty by default and will be filled with the block’s actions on the first call to optimize memory usage.
      *
