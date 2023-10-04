@@ -100,6 +100,9 @@ export class Block {
         return events
     }
 
+    /**
+     * Returns raw logs regardless of the fact that they are standard events or not.
+     */
     logs(): Log[] {
         const logs: Log[] = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.map((rawLog) => {
             let log: Log = { relatedReceiptId: executedReceipt.receiptId, log: rawLog }
