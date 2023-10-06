@@ -19,7 +19,8 @@
     "strict": true
   },
   "typedocOptions": {
-    "entryPoints": ["src/types/index.ts"],
+    "entryPoints": ["src/types/core/*.ts", "src/types/*.ts"],
+    "exclude": ["src/types/index.ts", "src/types/core/index.ts"],
     "out": "docs"
   },
   "include": ["src/**/*"]
