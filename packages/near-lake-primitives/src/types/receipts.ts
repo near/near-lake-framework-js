@@ -66,14 +66,53 @@ export class Receipt implements Events {
 
 }
 
+/**
+ * `ReceiptKind` a simple `enum` to represent the `Receipt` type: either `Action` or `Data`.
+ */
 export enum ReceiptKind {
   Action = 'Action',
   Data = 'Data',
 }
 
+/**
+ * `Action` is the structure with the fields and data relevant to an `ActionReceipt`.
+ *
+ * Basically, `Action` is the structure that indexer developers will be encouraged to work the most in their action-oriented indexers.
+ */
 export class Action {
 
-  constructor(readonly receiptId: string, readonly predecessorId: string, readonly receiverId: string, readonly signerId: string, readonly signerPublicKey: string, readonly operations: Operation[]) { }
+  constructor(
+  /**
+   * The id of the corresponding `Receipt`
+   */
+  readonly receiptId: string, 
+
+  /**
+   * The predecessor account id of the corresponding `Receipt`. 
+   * This field is a piece of denormalization of the structures (`Receipt` and `Action`).
+   */
+  readonly predecessorId: string, 
+
+  /**
+   * The receiver account id of the corresponding `Receipt`. 
+   * This field is a piece of denormalization of the structures (`Receipt` and `Action`).
+   */
+  readonly receiverId: string, 
+
+  /**
+   * The signer account id of the corresponding `Receipt`
+   */
+  readonly signerId: string, 
+
+  /**
+   * The signer’s PublicKey for the corresponding `Receipt`
+   */
+  readonly signerPublicKey: string, 
+
+  /**
+   * An array of `Operation` for this `ActionReceipt`
+   */
+  readonly operations: Operation[]) { }
 
   static isActionReceipt = (receipt: ReceiptView) => {
     if (typeof receipt.receipt === "object" && receipt.receipt.constructor.name === "ActionReceipt") return true
@@ -122,6 +161,9 @@ class DeleteAccount {
   constructor(readonly beneficiaryId: string) { }
 };
 
+/**
+ * A representation of the original `ActionView` from `near-primitives`.
+ */
 export type Operation =
   | 'CreateAccount'
   | DeployContract

@@ -17,23 +17,35 @@
 <li><a href="core_types.ExecutionStatus.html">ExecutionStatus</a></li></ul>
 <h1>Type alias ExecutionStatus</h1></div>
 <div class="tsd-signature"><span class="tsd-kind-type-alias">Execution<wbr/>Status</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">SuccessValue</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Uint8Array</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">SuccessReceiptId</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">Failure</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;Postponed&quot;</span></div>
+<div class="tsd-comment tsd-typography"><p><code>ExecutionStatus</code> is a simplified representation of the <code>ExecutionStatusView</code> from <code>near-primitives</code>. Represent the execution outcome status for the <code>Receipt</code>.</p>
+</div>
 <div class="tsd-type-declaration">
 <h4>Type declaration</h4>
 <ul class="tsd-parameters">
 <li class="tsd-parameter">
-<h5><span class="tsd-kind-property">Success<wbr/>Value</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Uint8Array</span></h5></li></ul></div>
+<h5><span class="tsd-kind-property">Success<wbr/>Value</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Uint8Array</span></h5>
+<div class="tsd-comment tsd-typography"><p>Execution succeeded with a value, value is represented by <code>Uint8Array</code> and can be anything.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li></ul></div>
 <div class="tsd-type-declaration">
 <h4>Type declaration</h4>
 <ul class="tsd-parameters">
 <li class="tsd-parameter">
-<h5><span class="tsd-kind-property">Success<wbr/>Receipt<wbr/>Id</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5></li></ul></div>
+<h5><span class="tsd-kind-property">Success<wbr/>Receipt<wbr/>Id</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>Execution succeeded and a result of the execution is a new <code>Receipt</code> with the id.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li></ul></div>
 <div class="tsd-type-declaration">
 <h4>Type declaration</h4>
 <ul class="tsd-parameters">
 <li class="tsd-parameter">
-<h5><span class="tsd-kind-property">Failure</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5></li></ul></div><aside class="tsd-sources">
+<h5><span class="tsd-kind-property">Failure</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>Execution failed with an error represented by a <code>String</code>.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li></ul></div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/core/types.ts#L140">core/types.ts:140</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/core/types.ts#L143">core/types.ts:143</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

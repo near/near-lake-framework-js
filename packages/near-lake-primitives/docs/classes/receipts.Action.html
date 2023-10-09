@@ -16,12 +16,17 @@
 <li><a href="../modules/receipts.html">receipts</a></li>
 <li><a href="receipts.Action.html">Action</a></li></ul>
 <h1>Class Action</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p><code>Action</code> is the structure with the fields and data relevant to an <code>ActionReceipt</code>.</p>
+<p>Basically, <code>Action</code> is the structure that indexer developers will be encouraged to work the most in their action-oriented indexers.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
 <li><span class="target">Action</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L74">receipts.ts:74</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L82">receipts.ts:82</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -56,52 +61,92 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">receiptId</span>: <span class="tsd-signature-type">string</span></h5></li>
+<h5><span class="tsd-kind-parameter">receiptId</span>: <span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>The id of the corresponding <code>Receipt</code></p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">predecessorId</span>: <span class="tsd-signature-type">string</span></h5></li>
+<h5><span class="tsd-kind-parameter">predecessorId</span>: <span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>The predecessor account id of the corresponding <code>Receipt</code>. 
+This field is a piece of denormalization of the structures (<code>Receipt</code> and <code>Action</code>).</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">receiverId</span>: <span class="tsd-signature-type">string</span></h5></li>
+<h5><span class="tsd-kind-parameter">receiverId</span>: <span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>The receiver account id of the corresponding <code>Receipt</code>. 
+This field is a piece of denormalization of the structures (<code>Receipt</code> and <code>Action</code>).</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">signerId</span>: <span class="tsd-signature-type">string</span></h5></li>
+<h5><span class="tsd-kind-parameter">signerId</span>: <span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>The signer account id of the corresponding <code>Receipt</code></p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">signerPublicKey</span>: <span class="tsd-signature-type">string</span></h5></li>
+<h5><span class="tsd-kind-parameter">signerPublicKey</span>: <span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>The signer’s PublicKey for the corresponding <code>Receipt</code></p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">operations</span>: <a href="../types/receipts.Operation.html" class="tsd-signature-type tsd-kind-type-alias">Operation</a><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h5><span class="tsd-kind-parameter">operations</span>: <a href="../types/receipts.Operation.html" class="tsd-signature-type tsd-kind-type-alias">Operation</a><span class="tsd-signature-symbol">[]</span></h5>
+<div class="tsd-comment tsd-typography"><p>An array of <code>Operation</code> for this <code>ActionReceipt</code></p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="receipts.Action.html" class="tsd-signature-type tsd-kind-class">Action</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L76">receipts.ts:76</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L84">receipts.ts:84</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="operations" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>operations</span><a href="#operations" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">operations</span><span class="tsd-signature-symbol">:</span> <a href="../types/receipts.Operation.html" class="tsd-signature-type tsd-kind-type-alias">Operation</a><span class="tsd-signature-symbol">[]</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">operations</span><span class="tsd-signature-symbol">:</span> <a href="../types/receipts.Operation.html" class="tsd-signature-type tsd-kind-type-alias">Operation</a><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>An array of <code>Operation</code> for this <code>ActionReceipt</code></p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L76">receipts.ts:76</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L115">receipts.ts:115</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="predecessorId" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>predecessor<wbr/>Id</span><a href="#predecessorId" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">predecessor<wbr/>Id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">predecessor<wbr/>Id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The predecessor account id of the corresponding <code>Receipt</code>. 
+This field is a piece of denormalization of the structures (<code>Receipt</code> and <code>Action</code>).</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L76">receipts.ts:76</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L94">receipts.ts:94</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="receiptId" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>receipt<wbr/>Id</span><a href="#receiptId" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">receipt<wbr/>Id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">receipt<wbr/>Id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The id of the corresponding <code>Receipt</code></p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L76">receipts.ts:76</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L88">receipts.ts:88</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="receiverId" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>receiver<wbr/>Id</span><a href="#receiverId" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">receiver<wbr/>Id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">receiver<wbr/>Id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The receiver account id of the corresponding <code>Receipt</code>. 
+This field is a piece of denormalization of the structures (<code>Receipt</code> and <code>Action</code>).</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L76">receipts.ts:76</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L100">receipts.ts:100</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="signerId" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>signer<wbr/>Id</span><a href="#signerId" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">signer<wbr/>Id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">signer<wbr/>Id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The signer account id of the corresponding <code>Receipt</code></p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L76">receipts.ts:76</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L105">receipts.ts:105</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="signerPublicKey" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>signer<wbr/>Public<wbr/>Key</span><a href="#signerPublicKey" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">signer<wbr/>Public<wbr/>Key</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">signer<wbr/>Public<wbr/>Key</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The signer’s PublicKey for the corresponding <code>Receipt</code></p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L76">receipts.ts:76</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L110">receipts.ts:110</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member"><a id="fromReceiptView" class="tsd-anchor"></a>
@@ -116,7 +161,7 @@
 <h5><span class="tsd-kind-parameter">receipt</span>: <a href="../types/core_types.ReceiptView.html" class="tsd-signature-type tsd-kind-type-alias">ReceiptView</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="receipts.Action.html" class="tsd-signature-type tsd-kind-class">Action</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L83">receipts.ts:83</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L122">receipts.ts:122</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="isActionReceipt" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>is<wbr/>Action<wbr/>Receipt</span><a href="#isActionReceipt" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -129,7 +174,7 @@
 <h5><span class="tsd-kind-parameter">receipt</span>: <a href="../types/core_types.ReceiptView.html" class="tsd-signature-type tsd-kind-type-alias">ReceiptView</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/eb97f28/packages/near-lake-primitives/src/types/receipts.ts#L78">receipts.ts:78</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/near/near-lake-framework-js//blob/facda62/packages/near-lake-primitives/src/types/receipts.ts#L117">receipts.ts:117</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

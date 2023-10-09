@@ -24,6 +24,9 @@ export class Event {
     }
 }
 
+/**
+ * This structure is a copy of the [JSON Events](https://github.com/near/NEPs/blob/master/neps/nep-0297.md) structure representation.
+ */
 export class RawEvent {
     constructor(readonly event: string, readonly standard: string, readonly version: string, readonly data: JSON | undefined) { }
 
