@@ -137,10 +137,25 @@ export type ReceiptView = {
     receipt: ReceiptEnum;
 };
 
+/**
+ * `ExecutionStatus` is a simplified representation of the `ExecutionStatusView` from [near-primitives](https://github.com/near/nearcore/tree/master/core/primitives). Represent the execution outcome status for the `Receipt`.
+ */
 export type ExecutionStatus =
-    | { SuccessValue: Uint8Array }
-    | { SuccessReceiptId: string }
-    | { Failure: string }
+    | { 
+    /**
+     * Execution succeeded with a value, value is represented by `Uint8Array` and can be anything.
+     */
+    SuccessValue: Uint8Array }
+    | { 
+    /**
+     * Execution succeeded and a result of the execution is a new `Receipt` with the id.
+     */
+    SuccessReceiptId: string }
+    | { 
+    /**
+     * Execution failed with an error represented by a `String`.
+     */
+    Failure: string }
     | 'Postponed'
 
 type ExecutionProof = {
