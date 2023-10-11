@@ -3,7 +3,7 @@ import { ExecutionOutcomeWithReceipt, ExecutionStatus, ReceiptView, ActionReceip
 import { Events, Event } from './events';
 
 /**
- * This field is a simplified representation of the `ReceiptView` structure from `near-primitives`.
+ * This field is a simplified representation of the `ReceiptView` structure from [near-primitives](https://github.com/near/nearcore/tree/master/core/primitives).
  */
 export class Receipt implements Events {
   constructor(
@@ -162,7 +162,7 @@ class DeleteAccount {
 };
 
 /**
- * A representation of the original `ActionView` from `near-primitives`.
+ * A representation of the original `ActionView` from [near-primitives](https://github.com/near/nearcore/tree/master/core/primitives).
  */
 export type Operation =
   | 'CreateAccount'

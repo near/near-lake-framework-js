@@ -138,7 +138,7 @@ export type ReceiptView = {
 };
 
 /**
- * `ExecutionStatus` is a simplified representation of the `ExecutionStatusView` from `near-primitives`. Represent the execution outcome status for the `Receipt`.
+ * `ExecutionStatus` is a simplified representation of the `ExecutionStatusView` from [near-primitives](https://github.com/near/nearcore/tree/master/core/primitives). Represent the execution outcome status for the `Receipt`.
  */
 export type ExecutionStatus =
     | { 

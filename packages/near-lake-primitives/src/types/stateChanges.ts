@@ -2,7 +2,7 @@ import { StateChangeWithCauseView } from './core/types';
 import { AccessKey } from './receipts';
 
 /**
- * This structure is almost an identical copy of the `StateChangeWithCauseView` from `near-primitives` with a propagated additional field `affectedAccountId`.
+ * This structure is almost an identical copy of the `StateChangeWithCauseView` from [near-primitives](https://github.com/near/nearcore/tree/master/core/primitives) with a propagated additional field `affectedAccountId`.
  */
 export class StateChange {
 

@@ -2,7 +2,7 @@ import { ExecutionStatus } from './core/types';
 import { Operation } from './receipts';
 
 /**
- * A representation of the `IndexerTransactionWithOutcome` from `near-indexer-primitives` which is an ephemeral structure combining `SignedTransactionView` from `near-primitives` and `IndexerExecutionOutcomeWithOptionalReceipt` from `near-indexer-primitives`.
+ * A representation of the `IndexerTransactionWithOutcome` from `near-indexer-primitives` which is an ephemeral structure combining `SignedTransactionView` from [near-primitives](https://github.com/near/nearcore/tree/master/core/primitives) and `IndexerExecutionOutcomeWithOptionalReceipt` from `near-indexer-primitives`.
  *
  * This structure is very similar to `Receipt`. Unlike `Receipt`, a `Transaction` has a few additional fields like `signerId`, `signature`, and `operations`.
  */

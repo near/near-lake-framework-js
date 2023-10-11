@@ -184,7 +184,7 @@ export class Block {
 
 
 /**
- * Replacement for `BlockHeaderView` from `near-primitives`. Shrunken and simplified. 
+ * Replacement for `BlockHeaderView` from [near-primitives](https://github.com/near/nearcore/tree/master/core/primitives). Shrunken and simplified. 
  *
  * **Note:** the original `BlockHeaderView` is still accessible via the `.streamerMessage` attribute.
  */
