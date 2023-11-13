@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Block reads event logs 1`] = `
+[
+  {
+    "rawEvent": RawEvent {
+      "data": undefined,
+      "event": "",
+      "standard": "{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"owner_id":"paras.near","token_ids":["144351:27"]}]}",
+      "version": undefined,
+    },
+    "relatedReceiptId": "AVeR4o6MWKYMhjJV8x6ZNk9U9kQYm1qbiN8bBaQQ4rWG",
+  },
+]
+`;
+
 exports[`Block serializes meta transactions 1`] = `
 {
   "Delegate": {
