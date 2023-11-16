@@ -16,7 +16,8 @@
     "build": "tsc",
     "clean": "rm -rf ./dist",
     "docs": "typedoc --tsconfig tsdocs.json",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "test": "jest -c ../../jest.config.js"
   },
   "devDependencies": {
     "typedoc": "^0.25.1"

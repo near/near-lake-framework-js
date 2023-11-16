@@ -260,6 +260,31 @@ type DeleteAccountAction = {
     };
 };
 
+export type DelegateAction = {
+  Delegate: {
+    delegateAction: {
+      senderId: string;
+      receiverId: string;
+      actions: NonDelegateAction[];
+      nonce: number;
+      maxBlockHeight: number;
+      publicKey: string;
+    }
+  };
+  signature: string;
+};
+
+// Delegate actions can not contain other delegate actions
+export type NonDelegateAction = 
+  | "CreateAccount"
+  | DeployContractAction
+  | FunctionCallAction
+  | TransferAction
+  | StakeAction
+  | AddKeyAction
+  | DeleteKeyAction
+  | DeleteAccountAction;
+
 type ActionView =
     | 'CreateAccount'
     | DeployContractAction
@@ -268,7 +293,8 @@ type ActionView =
     | StakeAction
     | AddKeyAction
     | DeleteKeyAction
-    | DeleteAccountAction;
+    | DeleteAccountAction
+    | DelegateAction;
 
 
 export type StateChangeWithCauseView = {

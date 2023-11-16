@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Block serializes meta transactions 1`] = `
+{
+  "Delegate": {
+    "delegateAction": {
+      "actions": [
+        {
+          "FunctionCall": {
+            "args": "eyJhY3Rpb25fbG9ncyI6W3siYWN0aW9uIjoie1wiZnVuY3Rpb25DYWxsXCI6e1wibWV0aG9kTmFtZVwiOlwiZGFpbHlfY2xhaW1cIixcImFyZ3NcIjpcImUzMD1cIixcImdhc1wiOlwiMTAwMDAwMDAwMDAwMDBcIixcImRlcG9zaXRcIjowfSxcImVudW1cIjpcImZ1bmN0aW9uQ2FsbFwifSIsInNpZ25hdHVyZSI6Ijc4Y2Y4ZTAxNTBjZDQ4OWUxOGIzMjU0ZjU4N2U4NGJmOTBmYjA1NWQxYjdmM2UxZTg0YmU5YjdmZmZkMDc0MTYxODVmZmI5ODM0ZDIxNzQyZWYwYmQzZjM1MDI0MjA1NTU3OGYwOWVmYzczOWNiMzZjYzkyOTFjNDFhZWI2NTk4NmZmNDUxOGRhNmM2ODAwNDg3MmFmMWJkZDFmMGVjODZhNWI5ODIzMzAyYmUwMTRkM2ZmNTM0Y2YwNDJkZjAyZjRiNGUzMjNkNWMwNTFmODQ0N2VlZjg4ZTZlMWZiMWI5ZWIyZGI4ODJjMmRjOWU5M2U2MTg2NGFiYjZhNjQwODJ8fDI0MGJkMWQyNTY2MTEwN2E3NTEzOWQ5MDQxNGVjZDc4In1dfQ==",
+            "deposit": "0",
+            "gas": 10000000000000,
+            "methodName": "action_logs",
+          },
+        },
+      ],
+      "maxBlockHeight": 105793873,
+      "nonce": 105688924000002,
+      "publicKey": "ed25519:5T29AvXUFiZusXGfRMYEznCXawhzQKgU5VaWXGgib1Sn",
+      "receiverId": "main.arkana.near",
+      "senderId": "cuttingnutshell5364174552.u.arkana.near",
+    },
+    "signature": "ed25519:3dWpDgrNthcsm1dQjBZT2EPg4h3kkrfTM2CvnuMgL8e4aTaUe7mYv1YQ9YCaAL9LKfGTktBWpR3kSxXvCjH2ntyK",
+  },
+}
+`;

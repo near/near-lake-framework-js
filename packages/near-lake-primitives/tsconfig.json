@@ -18,5 +18,5 @@
     "strictPropertyInitialization": true,
     "strict": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "test/**/*"]
 }
