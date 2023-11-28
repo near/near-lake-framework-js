@@ -4,42 +4,43 @@
 
 Available in programming languages: [Rust](https://github.com/near/near-lake-framework) | **Javascript**
 
-**ATTENTION!** This library is in beta and hasn't been tested in production yet.
-
 NEAR Lake Framework is a small library companion to [NEAR Lake](https://github.com/near/near-lake). It allows you to build
 your own indexer that subscribes to the stream of blocks from the NEAR Lake data source and create your own logic to process
 the NEAR Protocol data.
 
----
-
 [Official NEAR Lake Framework launch announcement](https://gov.near.org/t/announcement-near-lake-framework-brand-new-word-in-indexer-building-approach/17668) has been published on the NEAR Gov Forum
-Greetings from the Data Platform Team! We are happy and proud to announce an MVP release of a brand new word in indexer building approach - NEAR Lake Framework.
-
----
 
 ## Example
 
-```typescript
-import { startStream, types } from "near-lake-framework";
+```ts
+import { startStream, types } from '@near-lake/framework';
 
 const lakeConfig: types.LakeConfig = {
-  s3BucketName: "near-lake-data-mainnet",
-  s3RegionName: "eu-central-1",
-  startBlockHeight: 63804051,
+    s3BucketName: 'near-lake-data-mainnet',
+    s3RegionName: 'eu-central-1',
+    startBlockHeight: 66264389,
 };
 
-async function handleStreamerMessage(
-  streamerMessage: types.StreamerMessage
+async function handleBlock(
+    block: types.Block,
 ): Promise<void> {
-  console.log(
-    `Block #${streamerMessage.block.header.height} Shards: ${streamerMessage.shards.length}`
-  );
+    // custom logic for handling the block
+    let events = block.eventsByAccountId("x.paras.near")
+    console.log(events)
 }
 
 (async () => {
-  await startStream(lakeConfig, handleStreamerMessage);
+    await startStream(lakeConfig, handleStreamerMessage);
 })();
 ```
+
+## Packages
+
+NEAR Lake Framework JS originally existed as a single library: [near-lake-framework](https://www.npmjs.com/package/near-lake-framework). This package is still avaiable on NPM and can be used as is. But to make package consumption easier, the library has since been split in to sub-packages:
+- [@near-lake/framework](./packages/near-lake-framework/README.md) - core library for streaming blocks from NEAR Lake
+- [@near-lake/primitives](./packages/near-lake-primitives/README.md) - companion library to help interaction with blockchain data
+
+In most cases you will only need `@near-lake/framework`. For more information on both, see their respective READMEs.
 
 ## Tutorial
 
@@ -155,3 +156,13 @@ We use Milestones with clearly defined acceptance criteria:
 
 - [x] [MVP](https://github.com/near/near-lake-framework/milestone/1)
 - [ ] [1.0](https://github.com/near/near-lake-framework/milestone/2)
+
+## Running examples
+
+Inside `apps/` we have created a created a bunch of example implementations for using the indexer. 
+
+To test out any of the indexers, from the root, run:
+
+```bash
+$ npm run demo --name=<example_package_name>
+```

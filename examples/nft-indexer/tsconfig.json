@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "dist/",
+    "lib": [
+      "ES2019",
+      "dom"
+    ]
+  },
+  "include": ["src/**/*"]
+}

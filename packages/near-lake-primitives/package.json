@@ -1,0 +1,25 @@
+{
+  "name": "@near-lake/primitives",
+  "version": "0.1.0",
+  "keywords": [
+    "lake-primitives",
+    "near-indexer"
+  ],
+  "author": "NEAR Inc <hello@nearprotocol.com>",
+  "description": "Near Protocol primitive datatypes utilized by near-lake-framework",
+  "main": "dist/src/types/index.js",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf ./dist",
+    "docs": "typedoc --tsconfig tsdocs.json",
+    "dev": "tsc -w",
+    "test": "jest -c ../../jest.config.js"
+  },
+  "devDependencies": {
+    "typedoc": "^0.25.1"
+  },
+  "license": "(MIT OR Apache-2.0)"
+}
