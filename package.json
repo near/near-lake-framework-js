@@ -19,7 +19,8 @@
     "clean": "turbo run clean",
     "dev": "turbo run dev",
     "demo": "turbo run demo --filter=@near-lake/$npm_config_name",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "release": "changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.6",
