@@ -3,7 +3,13 @@
     "../../typedoc.json"
   ],
   "entryPoints": [
-    "src"
+    "src/types/core/*.ts",
+    "src/types/*.ts"
+  ],
+  "exclude": [
+    "src/types/index.ts",
+    "src/types/core/index.ts",
+    "src/types/lakeContext.ts"
   ],
   "entryPointStrategy": "expand",
 }
