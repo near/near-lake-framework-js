@@ -35,9 +35,9 @@ export class RawEvent {
     };
 
     static fromLog = (log: string): RawEvent => {
-        const [event, standard, version, data] = log.split('EVENT_JSON:');
+        const { event, standard, version, data } = JSON.parse(log.replace('EVENT_JSON:', ''));
 
-        return new RawEvent(event, standard, version, data ? JSON.parse(data) : undefined);
+        return new RawEvent(event, standard, version, data);
     };
 };
 
