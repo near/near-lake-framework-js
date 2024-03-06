@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Block deserializes using borsch 1`] = `
+{
+  "neardevdao.near": 3132,
+}
+`;
+
 exports[`Block parses event logs 1`] = `
 [
   {
