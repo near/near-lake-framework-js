@@ -55,15 +55,9 @@ describe("Block", () => {
         k: Buffer.from(c.keyBase64, "base64"),
         v: Buffer.from(c.valueBase64, "base64"),
       }));
+
     const authorToPostId = Object.fromEntries(
       addOrEditPost.map((kv) => {
-        console.log({
-          fromBo: fromBorsh("u32", kv.v.slice(9, 13)),
-          current: kv.v.slice(9, 13).readUInt32LE(),
-          equal:
-            fromBorsh("u32", kv.v.slice(9, 13)) ===
-            kv.v.slice(9, 13).readUInt32LE(),
-        });
         return [
           kv.v
             .slice(13, 13 + kv.v.slice(9, 13).readUInt32LE())
