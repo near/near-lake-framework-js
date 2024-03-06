@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 
-import { Block, StateChange } from "../src/types";
+import { Block } from "../src/types";
 
 import { fromBorsh } from "../src/fromBorsh";
 
@@ -44,12 +44,12 @@ describe("Block", () => {
       .flatMap((e) => e.stateChanges)
       .filter(
         (stateChange) =>
-          stateChange["change"].accountId === "devgovgigs.near" &&
+          stateChange.change.accountId === "devgovgigs.near" &&
           stateChange.type === "data_update"
       );
 
     const addOrEditPost = stateChanges
-      .map((stateChange) => stateChange["change"])
+      .map((stateChange) => stateChange.change)
       .filter((change) => base64toHex(change.keyBase64).startsWith("05"))
       .map((c) => ({
         k: Buffer.from(c.keyBase64, "base64"),
