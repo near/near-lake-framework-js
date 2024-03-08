@@ -34,8 +34,5 @@
     "turbo": "^1.8.4",
     "typedoc": "^0.25.4",
     "typescript": "^4.6.4"
-  },
-  "dependencies": {
-    "borsher": "^1.2.1"
   }
 }
