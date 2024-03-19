@@ -1,6 +1,6 @@
 {
   "name": "@near-lake/framework",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JS Library to connect to the NEAR Lake S3 and stream the data",
   "author": "NEAR Inc <hello@nearprotocol.com>",
   "keywords": [
@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.32.0",
-    "@near-lake/primitives": "^0.1.0"
+    "@near-lake/primitives": "^0.2.0"
   }
 }

@@ -1,5 +1,11 @@
 # @near-lake/primitives
 
+## 0.2.0
+
+### Minor Changes
+
+- [#53](https://github.com/near/near-lake-framework-js/pull/53) [`639de27fe9de798ad101bc7812ea38e6cf9cd5b5`](https://github.com/near/near-lake-framework-js/commit/639de27fe9de798ad101bc7812ea38e6cf9cd5b5) Thanks [@Tguntenaar](https://github.com/Tguntenaar)! - deserialization is now supported using borsh-js
+
 ## 0.1.1
 
 ### Patch Changes
