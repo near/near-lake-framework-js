@@ -21,5 +21,9 @@
   "devDependencies": {
     "typedoc": "^0.25.1"
   },
-  "license": "(MIT OR Apache-2.0)"
+  "license": "(MIT OR Apache-2.0)",
+  "dependencies": {
+    "borsh": "^2.0.0",
+    "borsher": "^1.2.1"
+  }
 }
