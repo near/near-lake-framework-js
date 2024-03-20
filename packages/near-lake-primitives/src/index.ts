@@ -1,3 +1,3 @@
 export * from "./types";
 
-export * from "./fromBorsh";
+export * as borsh from "./fromBorsh";
