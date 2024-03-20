@@ -1,5 +1,11 @@
 # @near-lake/primitives
 
+## 0.3.0
+
+### Minor Changes
+
+- [#55](https://github.com/near/near-lake-framework-js/pull/55) [`da497697fe46694e0cd3ea4f89f4905dc9422b11`](https://github.com/near/near-lake-framework-js/commit/da497697fe46694e0cd3ea4f89f4905dc9422b11) Thanks [@morgsmccauley](https://github.com/morgsmccauley)! - Scope borsh exports under `borsh`
+
 ## 0.2.0
 
 ### Minor Changes
