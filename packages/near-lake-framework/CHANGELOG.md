@@ -1,5 +1,12 @@
 # @near-lake/framework
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [[`da497697fe46694e0cd3ea4f89f4905dc9422b11`](https://github.com/near/near-lake-framework-js/commit/da497697fe46694e0cd3ea4f89f4905dc9422b11)]:
+  - @near-lake/primitives@0.3.0
+
 ## 0.1.1
 
 ### Patch Changes
