@@ -1,8 +1,6 @@
 import { readFile } from "fs/promises";
 
-import { Block } from "../src/types";
-
-import { fromBorsh } from "../src/fromBorsh";
+import { Block, borsh } from "../src";
 
 describe("Block", () => {
   it("serializes meta transactions", async () => {
@@ -68,11 +66,11 @@ describe("Block", () => {
     );
 
     expect(
-      fromBorsh("u64", addOrEditPost[0].k.slice(1)) ===
+      borsh.fromBorsh("u64", addOrEditPost[0].k.slice(1)) ===
         addOrEditPost[0].k.slice(1).readBigUInt64LE()
     );
     expect(
-      fromBorsh("u32", addOrEditPost[0].v.slice(9, 13)) ===
+      borsh.fromBorsh("u32", addOrEditPost[0].v.slice(9, 13)) ===
         addOrEditPost[0].v.slice(9, 13).readUInt32LE()
     );
     expect(authorToPostId).toMatchSnapshot();
