@@ -21,7 +21,8 @@
     "demo": "turbo run demo --filter=@near-lake/$npm_config_name",
     "test": "turbo run test",
     "docs:generate": "typedoc",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "changeset": "changeset add"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.6",
