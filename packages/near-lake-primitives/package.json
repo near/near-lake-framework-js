@@ -7,7 +7,7 @@
   ],
   "author": "NEAR Inc <hello@nearprotocol.com>",
   "description": "Near Protocol primitive datatypes utilized by near-lake-framework",
-  "main": "dist/src/types/index.js",
+  "main": "dist/src/index.js",
   "files": [
     "/dist"
   ],
