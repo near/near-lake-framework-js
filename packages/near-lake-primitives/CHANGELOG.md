@@ -1,5 +1,11 @@
 # @near-lake/primitives
 
+## 0.4.0
+
+### Minor Changes
+
+- [#57](https://github.com/near/near-lake-framework-js/pull/57) [`25ccd87bfca3e7d1a903935425597a9f458c55d8`](https://github.com/near/near-lake-framework-js/commit/25ccd87bfca3e7d1a903935425597a9f458c55d8) Thanks [@morgsmccauley](https://github.com/morgsmccauley)! - Ensure `borsh` export is accessible within published package
+
 ## 0.3.0
 
 ### Minor Changes
