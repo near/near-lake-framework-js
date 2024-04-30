@@ -27,6 +27,33 @@ exports[`Block parses event logs 1`] = `
 ]
 `;
 
+exports[`Block parses social operations 1`] = `
+[
+  {
+    "accountId": "flatirons.near",
+    "data": "{"near":{"modelProvider":{"openai":{"displayName":"OpenAI","logoUrl":{"cid":"bafkreicc3vj3dmcyedrlsb57uq72ojnppsoh2sp3ozcxko347ytvd4amxi","name":"OpenAI_Logo.png","type":"image/png","size":8735},"tags":null,"documentationUrl":""}}}}",
+  },
+]
+`;
+
+exports[`Block parses successful function calls 1`] = `
+[
+  {
+    "args": {
+      "data": {
+        "flatirons.near": {
+          "entities": "{"near":{"modelProvider":{"openai":{"displayName":"OpenAI","logoUrl":{"cid":"bafkreicc3vj3dmcyedrlsb57uq72ojnppsoh2sp3ozcxko347ytvd4amxi","name":"OpenAI_Logo.png","type":"image/png","size":8735},"tags":null,"documentationUrl":""}}}}",
+        },
+      },
+    },
+    "deposit": "0",
+    "gas": 100000000000000,
+    "methodName": "set",
+    "receiptId": "DoY9niR8tgMxHve1a7dCq36Eo3uRMJZtvMRsPozr1mYS",
+  },
+]
+`;
+
 exports[`Block serializes meta transactions 1`] = `
 {
   "Delegate": {

@@ -1,8 +1,14 @@
-import { Action, Receipt } from './receipts';
-import { StreamerMessage, ValidatorStakeView } from './core/types';
+import { Action, Receipt, Operation, FunctionCall, FunctionCallWrapper } from './receipts';
+import { StreamerMessage, ValidatorStakeView } from "./core/types";
 import { Transaction } from './transactions';
 import { Event, RawEvent, Log } from './events';
 import { StateChange } from './stateChanges';
+
+export type DecodedFunctionCall = {
+    methodName: string;
+    args: any;
+    receiptId: string;
+}
 
 /**
  * The `Block` type is used to represent a block in the NEAR Lake Framework.
@@ -79,11 +85,14 @@ export class Block {
     /**
      * Returns an Array of `Actions` executed in the block.
      */
-    actions(): Action[] {
+    actions(successfulOnly?: boolean): Action[] {
         const actions: Action[] = this.streamerMessage.shards
             .flatMap((shard) => shard.receiptExecutionOutcomes)
-            .filter((exeuctionOutcomeWithReceipt) => Action.isActionReceipt(exeuctionOutcomeWithReceipt.receipt))
-            .map((exeuctionOutcomeWithReceipt) => Action.fromReceiptView(exeuctionOutcomeWithReceipt.receipt))
+            .filter((executionOutcomeWithReceipt) =>
+                Action.isActionReceipt(executionOutcomeWithReceipt.receipt) &&
+                (!successfulOnly || (executionOutcomeWithReceipt.executionOutcome.outcome.status as {SuccessValue: any}))
+            )
+            .map((executionOutcomeWithReceipt) => Action.fromReceiptView(executionOutcomeWithReceipt.receipt))
             .filter((action): action is Action => action !== null)
             .map(action => action)
         return actions
@@ -156,6 +165,90 @@ export class Block {
             return action?.receiverId == account_id || action?.signerId == account_id
         });
     }
+
+    /**
+     * Decodes base64 encoded JSON data. Returns `undefined` if the data is not in the expected format.
+     * @param encodedValue
+     */
+    base64decode(encodedValue: any) {
+        try {
+            const buff = Buffer.from(encodedValue, "base64");
+            const str = buff.toString("utf-8").replace(/\\xa0/g, " ");
+            return JSON.parse(str);
+        } catch (error) {
+            console.error(
+              'Error parsing base64 JSON - skipping data',
+              error
+            );
+        }
+    }
+
+    /**
+     * Returns an Array of `DecodedFunctionCall` for the given `contract` and `method` if provided.
+     * If the `method` is not provided, it returns all the `DecodedFunctionCall`s for the given `contract`.
+     * Arguments to the function call are decoded from base64 to JSON.
+     * @param contract
+     * @param method
+     */
+    successfulFunctionCalls(contract: string, method?: string) : DecodedFunctionCall[] {
+        return this
+          .actions(true)
+          .filter((action) => action.receiverId === contract)
+          .flatMap((action: Action) =>
+            action.operations
+              .map((operation: Operation): FunctionCall => (operation as FunctionCallWrapper)?.FunctionCall)
+              .filter((functionCallOperation) => functionCallOperation && (!method || functionCallOperation?.methodName === method))
+              .map((functionCallOperation) => ({
+                  ...functionCallOperation,
+                  args: this.base64decode(functionCallOperation.args),
+                  receiptId: action.receiptId,
+              }))
+          );
+    };
+
+    /**
+     *  Returns data that follows the social.near contract template for key value data.
+     * @param operation The top level key to search for in each user's account space
+     * @param contract Defaults to 'social.near', pass in a different contract if needed
+     * @param method Defaults to 'set', pass in a different method if needed
+     */
+    socialOperations(operation: string, contract: string = "social.near", method: string = "set") {
+        return this.successfulFunctionCalls(contract, method)
+          .filter((functionCall) => {
+              if (
+                !functionCall ||
+                !functionCall.args ||
+                !functionCall.args.data ||
+                !Object.keys(functionCall.args.data) ||
+                !Object.keys(functionCall.args.data)[0]
+              ) {
+                  console.error(
+                    "Set operation did not have arg data in expected format"
+                  );
+                  return;
+              }
+              const accountId = Object.keys(functionCall.args.data)[0];
+              if (!functionCall.args.data[accountId]) {
+                  console.error("Set operation did not have arg data for accountId");
+                  return;
+              }
+              const accountData = functionCall.args.data[accountId];
+              if (!accountData) {
+                  console.error(
+                    "Set operation did not have arg data for accountId in expected format"
+                  );
+                  return;
+              }
+              return accountData[operation];
+          })
+          .map((functionCall) => {
+              const accountId = Object.keys(functionCall.args.data)[0];
+              return {
+                  accountId,
+                  data: functionCall.args.data[accountId][operation],
+              };
+          });
+    };
 
     private buildActionsHashmap() {
         const actions = new Map<string, Action>();
