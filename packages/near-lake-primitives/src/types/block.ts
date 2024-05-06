@@ -6,7 +6,7 @@ import { StateChange } from './stateChanges';
 
 export type DecodedFunctionCall = {
     methodName: string;
-    args: any;
+    args: Record<string, any>;
     receiptId: string;
 }
 
