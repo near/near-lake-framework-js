@@ -137,7 +137,9 @@ class DeployContract {
   constructor(readonly code: Uint8Array) { }
 };
 
-class FunctionCall {
+export type FunctionCallWrapper = {FunctionCall: FunctionCall};
+
+export class FunctionCall {
   constructor(readonly methodName: string, readonly args: Uint8Array, readonly gas: number, readonly deposit: string) { }
 };
 
@@ -167,7 +169,7 @@ class DeleteAccount {
 export type Operation =
   | 'CreateAccount'
   | DeployContract
-  | FunctionCall
+  | FunctionCallWrapper
   | Transfer
   | Stake
   | AddKey

@@ -75,4 +75,24 @@ describe("Block", () => {
     );
     expect(authorToPostId).toMatchSnapshot();
   });
+
+  it("parses successful function calls", async () => {
+    let streamerMessageBuffer = await readFile(
+      `${__dirname}/../../../blocks/117969098.json`
+    );
+    let streamerMessage = JSON.parse(streamerMessageBuffer.toString());
+    let block = Block.fromStreamerMessage(streamerMessage);
+
+    expect(block.successfulFunctionCalls("social.near")).toMatchSnapshot();
+  });
+
+  it("parses social operations", async () => {
+    let streamerMessageBuffer = await readFile(
+      `${__dirname}/../../../blocks/117969098.json`
+    );
+    let streamerMessage = JSON.parse(streamerMessageBuffer.toString());
+    let block = Block.fromStreamerMessage(streamerMessage);
+
+    expect(block.socialOperations("entities")).toMatchSnapshot();
+  });
 });
