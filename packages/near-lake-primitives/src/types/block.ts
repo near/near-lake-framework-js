@@ -1,8 +1,9 @@
-import { Action, Receipt } from './receipts';
-import { StreamerMessage, ValidatorStakeView } from './core/types';
-import { Transaction } from './transactions';
-import { Event, RawEvent, Log } from './events';
-import { StateChange } from './stateChanges';
+import { Action, FunctionCall, Receipt } from "./receipts";
+import { FunctionCallView, ReceiptStatusFilter, StreamerMessage, ValidatorStakeView } from "./core/types";
+import { Transaction } from "./transactions";
+import { Event, Log } from "./events";
+import { StateChange } from "./stateChanges";
+import { isMatchingReceiptStatus, isMatchingReceiver } from "../helpers";
 
 /**
  * The `Block` type is used to represent a block in the NEAR Lake Framework.
@@ -56,6 +57,15 @@ export class Block {
     }
 
     /**
+     * Returns the block date in ISO format, e.g. 2022-01-01.
+     */
+    get blockDate(): string {
+        return new Date(this.streamerMessage.block.header.timestamp / 1000000)
+          .toISOString()
+          .substring(0, 10);
+    }
+
+    /**
      * Returns a `BlockHeader` structure of the block
      * See `BlockHeader` structure sections for details.
      */
@@ -80,24 +90,32 @@ export class Block {
      * Returns an Array of `Actions` executed in the block.
      */
     actions(): Action[] {
-        const actions: Action[] = this.streamerMessage.shards
-            .flatMap((shard) => shard.receiptExecutionOutcomes)
-            .filter((exeuctionOutcomeWithReceipt) => Action.isActionReceipt(exeuctionOutcomeWithReceipt.receipt))
-            .map((exeuctionOutcomeWithReceipt) => Action.fromReceiptView(exeuctionOutcomeWithReceipt.receipt))
-            .filter((action): action is Action => action !== null)
-            .map(action => action)
-        return actions
+        return this.streamerMessage.shards
+          .flatMap((shard) => shard.receiptExecutionOutcomes)
+          .filter((executionOutcomeWithReceipt) => Action.isActionReceipt(executionOutcomeWithReceipt.receipt))
+          .map((executionOutcomeWithReceipt) => Action.fromOutcomeWithReceipt(executionOutcomeWithReceipt))
+          .filter((action): action is Action => action !== null)
+    }
+
+    /**
+     * Returns an Array of function calls executed in the block.
+     */
+    functionCalls(contractFilter="*", statusFilter: ReceiptStatusFilter="onlySuccessful"): FunctionCallView[] {
+        return this.actions()
+          .filter(action =>
+            isMatchingReceiver(action.receiverId, contractFilter)
+            && isMatchingReceiptStatus(action.receiptStatus, statusFilter))
+          .flatMap(a =>
+            a.operations
+            .filter(op => op instanceof FunctionCall)
+            .map(op => FunctionCallView.fromFunctionCall(op as FunctionCall)));
     }
 
     /**
      * Returns `Events` emitted in the block.
      */
     events(): Event[] {
-        const events = this.receipts().flatMap((executedReceipt) => executedReceipt.logs.filter(RawEvent.isEvent).map(RawEvent.fromLog).map((rawEvent) => {
-            let event: Event = { relatedReceiptId: executedReceipt.receiptId, rawEvent: rawEvent }
-            return event
-        }))
-        return events
+        return this.receipts().flatMap((receipt) => receipt.events);
     }
 
     /**

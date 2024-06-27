@@ -1,3 +1,5 @@
+import { FunctionCall } from "../receipts";
+
 export type BlockHeight = number;
 
 export interface StreamerMessage {
@@ -162,22 +164,24 @@ type ExecutionProof = {
   hash: string;
 };
 
+export type ReceiptExecutionOutcome = {
+  executorId: string;
+  gasBurnt: number;
+  logs: string[];
+  metadata: {
+    gasProfile: string | null;
+    version: number;
+  };
+  receiptIds: string[];
+  status: ExecutionStatus;
+  tokensBurnt: string;
+}
+
 export type ExecutionOutcomeWithReceipt = {
   executionOutcome: {
     blockHash: string;
     id: string;
-    outcome: {
-      executorId: string;
-      gasBurnt: number;
-      logs: string[];
-      metadata: {
-        gasProfile: string | null;
-        version: number;
-      };
-      receiptIds: string[];
-      status: ExecutionStatus;
-      tokensBurnt: string;
-    };
+    outcome: ReceiptExecutionOutcome;
     proof: ExecutionProof[];
   };
   receipt: ReceiptView;
@@ -311,3 +315,23 @@ export type StateChangeWithCauseView = {
   };
   type: string;
 };
+
+export type ReceiptStatusFilter = "all"|"onlySuccessful"|"onlyFailed";
+
+export class FunctionCallView {
+  constructor(
+    readonly methodName: string,
+    readonly args: JSON,
+    readonly gas: number,
+    readonly deposit: string
+  ) {}
+
+  static fromFunctionCall(functionCall: FunctionCall): FunctionCallView {
+    return new FunctionCallView(
+      functionCall.methodName,
+      JSON.parse(Buffer.from(functionCall.args).toString('ascii')),
+      functionCall.gas,
+      functionCall.deposit
+    )
+  }
+}

@@ -18,9 +18,9 @@ export type Log = {
 export class Event {
     constructor(readonly relatedReceiptId: string, readonly rawEvent: RawEvent) { }
 
-    static fromLog = (log: string): Event => {
+    static fromLog = (log: string, relatedReceiptId=''): Event => {
         const rawEvent = RawEvent.fromLog(log);
-        return new Event('', rawEvent);
+        return new Event(relatedReceiptId, rawEvent);
     }
 }
 
