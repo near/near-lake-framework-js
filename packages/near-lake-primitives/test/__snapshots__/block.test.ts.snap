@@ -8,7 +8,7 @@ exports[`Block deserializes using borsch 1`] = `
 
 exports[`Block parses event logs 1`] = `
 [
-  {
+  Event {
     "rawEvent": RawEvent {
       "data": [
         {
@@ -22,7 +22,7 @@ exports[`Block parses event logs 1`] = `
       "standard": "nep171",
       "version": "1.0.0",
     },
-    "relatedReceiptId": "AVeR4o6MWKYMhjJV8x6ZNk9U9kQYm1qbiN8bBaQQ4rWG",
+    "receiptId": "AVeR4o6MWKYMhjJV8x6ZNk9U9kQYm1qbiN8bBaQQ4rWG",
   },
 ]
 `;

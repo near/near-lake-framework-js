@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/near/near-lake-framework-js.git"
   },
-  "homepage": "https://near-indexers.io",
+  "homepage": "https://docs.near.org/concepts/advanced/near-lake-framework",
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
