@@ -1,5 +1,3 @@
-import { FunctionCall } from "../receipts";
-
 export type BlockHeight = number;
 
 export interface StreamerMessage {
@@ -12,6 +10,7 @@ export interface BlockView {
   header: BlockHeaderView;
   chunks: ChunkHeader[];
 }
+
 export interface BlockHeaderView {
   author: any;
   approvals: (string | null)[];
@@ -140,23 +139,23 @@ export type ReceiptView = {
  */
 export type ExecutionStatus =
   | {
-      /**
-       * Execution succeeded with a value, value is represented by `Uint8Array` and can be anything.
-       */
-      SuccessValue: Uint8Array;
-    }
+  /**
+   * Execution succeeded with a value, value is represented by `Uint8Array` and can be anything.
+   */
+  SuccessValue: Uint8Array;
+}
   | {
-      /**
-       * Execution succeeded and a result of the execution is a new `Receipt` with the id.
-       */
-      SuccessReceiptId: string;
-    }
+  /**
+   * Execution succeeded and a result of the execution is a new `Receipt` with the id.
+   */
+  SuccessReceiptId: string;
+}
   | {
-      /**
-       * Execution failed with an error represented by a `String`.
-       */
-      Failure: string;
-    }
+  /**
+   * Execution failed with an error represented by a `String`.
+   */
+  Failure: string;
+}
   | "Postponed";
 
 type ExecutionProof = {
@@ -316,22 +315,5 @@ export type StateChangeWithCauseView = {
   type: string;
 };
 
-export type ReceiptStatusFilter = "all"|"onlySuccessful"|"onlyFailed";
+export type ReceiptStatusFilter = "all" | "onlySuccessful" | "onlyFailed";
 
-export class FunctionCallView {
-  constructor(
-    readonly methodName: string,
-    readonly args: JSON,
-    readonly gas: number,
-    readonly deposit: string
-  ) {}
-
-  static fromFunctionCall(functionCall: FunctionCall): FunctionCallView {
-    return new FunctionCallView(
-      functionCall.methodName,
-      JSON.parse(Buffer.from(functionCall.args).toString('ascii')),
-      functionCall.gas,
-      functionCall.deposit
-    )
-  }
-}
