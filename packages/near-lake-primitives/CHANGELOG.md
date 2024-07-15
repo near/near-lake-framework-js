@@ -1,5 +1,19 @@
 # @near-lake/primitives
 
+## 0.5.0
+
+### Minor Changes
+
+- [#61](https://github.com/near/near-lake-framework-js/pull/61) [`7971e995b52dfbc764dba607e9fd40dea5ca0ef0`](https://github.com/near/near-lake-framework-js/commit/7971e995b52dfbc764dba607e9fd40dea5ca0ef0) Thanks [@pkudinov](https://github.com/pkudinov)! - Added:
+
+  - `Block.functionCalls` to get an array of FunctionCallView in this block, with different filters
+  - `Block.functionCallsToReceiver` to get an array of FunctionCallView to a specific receiver, optionally specifying method name
+  - `FunctionCallView` type that provides complete information about the function call, including parsed arguments and events
+
+  Changed:
+
+  - `Event` class has been changed to inline RawEvent fields.
+
 ## 0.4.0
 
 ### Minor Changes
