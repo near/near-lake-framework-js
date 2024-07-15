@@ -1,14 +1,9 @@
-import { readFile } from "fs/promises";
-
-import { Block, borsh } from "../src";
+import { borsh } from "../src";
+import { getBlock } from "./helpers";
 
 describe("Block", () => {
   it("serializes meta transactions", async () => {
-    let streamerMessageBuffer = await readFile(
-      `${__dirname}/../../../blocks/105793821.json`
-    );
-    let streamerMessage = JSON.parse(streamerMessageBuffer.toString());
-    let block = Block.fromStreamerMessage(streamerMessage);
+    const block = await getBlock(105793821);
 
     const actions = block.actionByReceiptId(
       "Dpego7SpsK36PyXjUMrFoSze8ZpNsB9xhb3XJJYtXSix"
@@ -17,11 +12,7 @@ describe("Block", () => {
   });
 
   it("parses event logs", async () => {
-    let streamerMessageBuffer = await readFile(
-      `${__dirname}/../../../blocks/61321189.json`
-    );
-    let streamerMessage = JSON.parse(streamerMessageBuffer.toString());
-    let block = Block.fromStreamerMessage(streamerMessage);
+    const block = await getBlock(61321189);
 
     expect(block.events()).toMatchSnapshot();
   });
@@ -32,11 +23,7 @@ describe("Block", () => {
   }
 
   it("deserializes using borsch", async () => {
-    let streamerMessageBuffer = await readFile(
-      `${__dirname}/../../../blocks/114158749.json`
-    );
-    let streamerMessage = JSON.parse(streamerMessageBuffer.toString());
-    let block = Block.fromStreamerMessage(streamerMessage);
+    const block = await getBlock(114158749);
 
     const stateChanges = block.streamerMessage.shards
       .flatMap((e) => e.stateChanges)

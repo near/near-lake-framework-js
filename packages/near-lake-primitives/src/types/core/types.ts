@@ -10,6 +10,7 @@ export interface BlockView {
   header: BlockHeaderView;
   chunks: ChunkHeader[];
 }
+
 export interface BlockHeaderView {
   author: any;
   approvals: (string | null)[];
@@ -138,23 +139,23 @@ export type ReceiptView = {
  */
 export type ExecutionStatus =
   | {
-      /**
-       * Execution succeeded with a value, value is represented by `Uint8Array` and can be anything.
-       */
-      SuccessValue: Uint8Array;
-    }
+  /**
+   * Execution succeeded with a value, value is represented by `Uint8Array` and can be anything.
+   */
+  SuccessValue: Uint8Array;
+}
   | {
-      /**
-       * Execution succeeded and a result of the execution is a new `Receipt` with the id.
-       */
-      SuccessReceiptId: string;
-    }
+  /**
+   * Execution succeeded and a result of the execution is a new `Receipt` with the id.
+   */
+  SuccessReceiptId: string;
+}
   | {
-      /**
-       * Execution failed with an error represented by a `String`.
-       */
-      Failure: string;
-    }
+  /**
+   * Execution failed with an error represented by a `String`.
+   */
+  Failure: string;
+}
   | "Postponed";
 
 type ExecutionProof = {
@@ -162,22 +163,24 @@ type ExecutionProof = {
   hash: string;
 };
 
+export type ReceiptExecutionOutcome = {
+  executorId: string;
+  gasBurnt: number;
+  logs: string[];
+  metadata: {
+    gasProfile: string | null;
+    version: number;
+  };
+  receiptIds: string[];
+  status: ExecutionStatus;
+  tokensBurnt: string;
+}
+
 export type ExecutionOutcomeWithReceipt = {
   executionOutcome: {
     blockHash: string;
     id: string;
-    outcome: {
-      executorId: string;
-      gasBurnt: number;
-      logs: string[];
-      metadata: {
-        gasProfile: string | null;
-        version: number;
-      };
-      receiptIds: string[];
-      status: ExecutionStatus;
-      tokensBurnt: string;
-    };
+    outcome: ReceiptExecutionOutcome;
     proof: ExecutionProof[];
   };
   receipt: ReceiptView;
@@ -311,3 +314,6 @@ export type StateChangeWithCauseView = {
   };
   type: string;
 };
+
+export type ReceiptStatusFilter = "all" | "onlySuccessful" | "onlyFailed";
+

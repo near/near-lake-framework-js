@@ -5,8 +5,8 @@
     "lake-primitives",
     "near-indexer"
   ],
-  "author": "NEAR Inc <hello@nearprotocol.com>",
-  "description": "Near Protocol primitive datatypes utilized by near-lake-framework",
+  "author": "Data Platform <dataplatform@near.org>",
+  "description": "Near Protocol primitive datatypes utilized by near-lake-framework and QueryAPI",
   "main": "dist/src/index.js",
   "files": [
     "/dist"
