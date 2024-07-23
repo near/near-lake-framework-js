@@ -137,23 +137,16 @@ export class Block {
    * Returns an Array of function calls to receivers matching receiverFilter.
    * @param receiverFilter - filter by contract name (e.g. `*.pool.near,*.poolv1.near`). Default is `*` (all contracts).
    * @param method - name of the method to filter by. Returns all function calls to receiverFilter if not provided.
+   * @param statusFilter - filter by receipt status (all|onlySuccessful|onlyFailed). Default is `onlySuccessful`.
    */
   functionCallsToReceiver(
     receiverFilter = "*",
-    method?: string
+    method?: string,
+    statusFilter: ReceiptStatusFilter = "onlySuccessful"
   ): FunctionCallView[] {
-    return this.actions()
-      .filter((action) => isMatchingReceiver(action.receiverId, receiverFilter))
-      .flatMap((a) =>
-        a.operations
-          .filter((op) => op.hasOwnProperty("FunctionCall"))
-          .filter((op) =>
-            method ? Object(op).FunctionCall.methodName === method : true
-          )
-          .map((op) =>
-            FunctionCallView.fromFunctionCall(Object(op).FunctionCall, a)
-          )
-      );
+    return this.functionCalls(receiverFilter, statusFilter).filter((call) =>
+      method ? call.methodName === method : true
+    );
   }
 
   /**
