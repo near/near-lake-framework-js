@@ -30,7 +30,7 @@ async function handleBlock(
 }
 
 (async () => {
-    await startStream(lakeConfig, handleStreamerMessage);
+    await startStream(lakeConfig, handleBlock);
 })();
 ```
 
