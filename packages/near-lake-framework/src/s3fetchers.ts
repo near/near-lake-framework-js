@@ -9,6 +9,7 @@ import {
 
 import {
     BlockHeight,
+    ChunkHeader,
     BlockView,
     Shard,
     StreamerMessage,
@@ -50,7 +51,7 @@ export async function fetchStreamerMessage(
         client,
         bucketName,
         blockHeight,
-        block.chunks.length
+        block.chunks
     );
     return { block, shards };
 }
@@ -94,13 +95,11 @@ async function fetchShards(
     client: S3Client,
     bucketName: string,
     blockHeight: BlockHeight,
-    numberOfShards: number
+    chunks: ChunkHeader[]
 ): Promise<Shard[]> {
-    if (numberOfShards === 0) return [];
-
     return await Promise.all(
-        [...Array(numberOfShards).keys()].map(async (index) =>
-            fetchSingleShard(client, bucketName, blockHeight, index)
+        chunks.map(async (chunk) =>
+            fetchSingleShard(client, bucketName, blockHeight, chunk.shardId)
         )
     );
 }
