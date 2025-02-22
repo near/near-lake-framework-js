@@ -1,6 +1,6 @@
 ---
-"@near-lake/primitives": major
-"@near-lake/framework": major
+"@near-lake/primitives": patch
+"@near-lake/framework": patch
 ---
 
-fixed resharding
+Fixed handling of chunks downloading for resharding, where shard_id is now arbitrary number
