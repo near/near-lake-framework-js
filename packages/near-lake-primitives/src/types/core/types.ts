@@ -66,7 +66,7 @@ type ChallengeResult = {
   isDoubleSign: boolean;
 };
 
-interface ChunkHeader {
+export interface ChunkHeader {
   balanceBurnt: number;
   chunkHash: string;
   encodedLength: number;
@@ -139,23 +139,23 @@ export type ReceiptView = {
  */
 export type ExecutionStatus =
   | {
-  /**
-   * Execution succeeded with a value, value is represented by `Uint8Array` and can be anything.
-   */
-  SuccessValue: Uint8Array;
-}
+    /**
+     * Execution succeeded with a value, value is represented by `Uint8Array` and can be anything.
+     */
+    SuccessValue: Uint8Array;
+  }
   | {
-  /**
-   * Execution succeeded and a result of the execution is a new `Receipt` with the id.
-   */
-  SuccessReceiptId: string;
-}
+    /**
+     * Execution succeeded and a result of the execution is a new `Receipt` with the id.
+     */
+    SuccessReceiptId: string;
+  }
   | {
-  /**
-   * Execution failed with an error represented by a `String`.
-   */
-  Failure: string;
-}
+    /**
+     * Execution failed with an error represented by a `String`.
+     */
+    Failure: string;
+  }
   | "Postponed";
 
 type ExecutionProof = {
