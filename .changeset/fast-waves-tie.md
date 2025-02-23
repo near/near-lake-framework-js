@@ -1,5 +1,5 @@
 ---
-"@near-lake/primitives": minor
+"@near-lake/primitives": patch
 ---
 
 Add statusFilter to functionCallsToReceiver
