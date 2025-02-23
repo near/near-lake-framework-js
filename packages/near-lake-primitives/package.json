@@ -1,6 +1,6 @@
 {
   "name": "@near-lake/primitives",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "keywords": [
     "lake-primitives",
     "near-indexer"

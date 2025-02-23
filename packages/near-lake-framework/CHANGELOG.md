@@ -1,5 +1,14 @@
 # @near-lake/framework
 
+## 0.1.5
+
+### Patch Changes
+
+- [#65](https://github.com/near/near-lake-framework-js/pull/65) [`19c8aa1e7ea5fe5a0d618cbc0ebd841357ffab1f`](https://github.com/near/near-lake-framework-js/commit/19c8aa1e7ea5fe5a0d618cbc0ebd841357ffab1f) Thanks [@frolvanya](https://github.com/frolvanya)! - Fixed handling of chunks downloading for resharding, where shard_id is now arbitrary number
+
+- Updated dependencies [[`2c93adc2f6df5e9b4bc1e401a928bb6a1b9a64d9`](https://github.com/near/near-lake-framework-js/commit/2c93adc2f6df5e9b4bc1e401a928bb6a1b9a64d9), [`19c8aa1e7ea5fe5a0d618cbc0ebd841357ffab1f`](https://github.com/near/near-lake-framework-js/commit/19c8aa1e7ea5fe5a0d618cbc0ebd841357ffab1f)]:
+  - @near-lake/primitives@0.5.2
+
 ## 0.1.4
 
 ### Patch Changes
